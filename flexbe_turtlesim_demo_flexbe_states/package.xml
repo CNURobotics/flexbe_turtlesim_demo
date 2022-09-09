@@ -6,10 +6,10 @@
   <name>flexbe_turtlesim_demo_flexbe_states</name>
   <version>1.0.0</version>
   <description>
-     flexbe_turtlesim_demo_flexbe_states provides a collection of custom states.
-     Feel free to add new states.
+     flexbe_turtlesim_demo_flexbe_states provides a collection of custom states to
+     provide a simple demonstration of FlexBE using the ROS Turtlesim packages.
   </description>
-  <maintainer email="todo@todo.com">TODO</maintainer>
+  <maintainer email="robotics@cnu.edu">David Conner</maintainer>
   <license>BSD</license>
 
   <exec_depend>rclcpp</exec_depend>
@@ -23,6 +23,9 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <depend>flexbe_app</depend>
+  <depend>flexbe_behavior_engine</depend>
 
   <export>
       <flexbe_states />

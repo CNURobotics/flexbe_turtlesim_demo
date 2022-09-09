@@ -15,14 +15,16 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='phil',
-    maintainer_email='philsplus@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='David Conner',
+    maintainer_email='robotics@cnu.edu',
+    description='flexbe_turtlesim_demo_flexbe_behaviors provides a collection of custom behaviors to
+provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
+    license='BSD',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'example_behavior_sm = flexbe_turtlesim_demo_flexbe_behaviors.example_behavior_sm',
+            'simple_turtlesim_behavior_sm = flexbe_turtlesim_demo_flexbe_behaviors.simple_turtlesim_behavior_sm',
         ],
     },
 )

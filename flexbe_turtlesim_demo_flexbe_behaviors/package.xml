@@ -6,9 +6,10 @@
     <name>flexbe_turtlesim_demo_flexbe_behaviors</name>
     <version>1.0.0</version>
     <description>
-       flexbe_turtlesim_demo_flexbe_behaviors references all implemented behaviors.
+       flexbe_turtlesim_demo_flexbe_behaviors references all implemented behaviors to
+       provide a simple demonstration of FlexBE using the ROS Turtlesim packages.
     </description>
-    <maintainer email="todo@todo.com">TODO</maintainer>
+    <maintainer email="robotics@cnu.edu">David Conner</maintainer>
     <license>BSD</license>
 
     <exec_depend>rclcpp</exec_depend>
@@ -21,6 +22,10 @@
 
     <buildtool_depend>ament_cmake</buildtool_depend>
     <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+    <depend>flexbe_app</depend>
+    <depend>flexbe_behavior_engine</depend>
+    <depend>flexbe_turtlesim_demo_flexbe_states</depend>
 
     <export>
         <flexbe_behaviors />

@@ -15,15 +15,18 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='phil',
-    maintainer_email='philsplus@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='David Conner',
+    maintainer_email='robotics@cnu.edu',
+    description='flexbe_turtlesim_demo_flexbe_states provides a collection of custom states to
+provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
+    license='BSD',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'example_action_state = flexbe_turtlesim_demo_flexbe_states.example_action_state',
             'example_state = flexbe_turtlesim_demo_flexbe_states.example_state',
+            'timed_twist_state = flexbe_turtlesim_demo_flexbe_states.timed_twist_state',
+            'teleport_absolute_state = flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state',
         ],
     },
 )

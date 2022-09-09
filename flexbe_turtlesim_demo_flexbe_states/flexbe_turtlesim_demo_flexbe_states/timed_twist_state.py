@@ -43,8 +43,8 @@ from flexbe_core.proxy import ProxyPublisher
 from geometry_msgs.msg import Twist
 
 # Based on flexible_navigation : flex_nav_flexbe_states: TimedTwistState
-# Removes TimedTwistState handling
-class TimedTwistState(EventState):
+# but removes TwistStamped handling
+class TimedCmdVelState(EventState):
     '''
     This state publishes an open loop constant Twist command based on parameters.
 
@@ -57,9 +57,9 @@ class TimedTwistState(EventState):
 
     def __init__(self, target_time, velocity, rotation_rate, cmd_topic='cmd_vel'):
         # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-        super(TimedTwistState, self).__init__(outcomes = ['done'])
+        super(TimedCmdVelState, self).__init__(outcomes = ['done'])
 
-        ProxyPublisher._initialize(TimedTwistState._node)
+        ProxyPublisher._initialize(TimedCmdVelState._node)
 
         # Store state parameter for later use.
         self._target_time = Duration(seconds=target_time)

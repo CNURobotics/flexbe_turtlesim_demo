@@ -11,7 +11,7 @@ from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyC
 from flexbe_states.log_state import LogState
 from flexbe_states.operator_decision_state import OperatorDecisionState
 from flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state import TeleportAbsoluteState
-from flexbe_turtlesim_demo_flexbe_states.timed_twist_state import TimedTwistState as flexbe_turtlesim_demo_flexbe_states__TimedTwistState
+from flexbe_turtlesim_demo_flexbe_states.timed_twist_state import TimedCmdVelState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
 
@@ -42,11 +42,11 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 		LogState.initialize_ros(node)
 		OperatorDecisionState.initialize_ros(node)
 		TeleportAbsoluteState.initialize_ros(node)
-		TimedTwistState.initialize_ros(node)
+		TimedCmdVelState.initialize_ros(node)
 
 		# Additional initialization code can be added inside the following tags
 		# [MANUAL_INIT]
-		
+
 		# [/MANUAL_INIT]
 
 		# Behavior comments:
@@ -59,7 +59,7 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
-		
+
 		# [/MANUAL_CREATE]
 
 		# x:545 y:72, x:130 y:365
@@ -68,7 +68,7 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 		with _sm_container_0:
 			# x:130 y:43
 			OperatableStateMachine.add('Forward0',
-										flexbe_turtlesim_demo_flexbe_states__TimedTwistState(target_time=1.0, velocity=0.25, rotation_rate=0.0, cmd_topic='/turtle1/cmd_vel'),
+										TimedCmdVelState(target_time=1.0, velocity=0.25, rotation_rate=0.0, cmd_topic='/turtle1/cmd_vel'),
 										transitions={'done': 'finished'},
 										autonomy={'done': Autonomy.Off})
 
@@ -135,5 +135,5 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 
 	# Private functions can be added inside the following tags
 	# [MANUAL_FUNC]
-	
+
 	# [/MANUAL_FUNC]

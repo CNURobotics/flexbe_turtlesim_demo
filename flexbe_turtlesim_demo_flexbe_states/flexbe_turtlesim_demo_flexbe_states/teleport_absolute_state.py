@@ -38,10 +38,9 @@
 import rclpy
 from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
-from flexbe_core.proxy import ProxyPublisher
+from flexbe_core.proxy import ProxyServiceCaller
 
 from turtlesim.srv import TeleportAbsolute
-from turtlesim.srv import TeleportAbsoluteRequest, TeleportAbsoluteResult
 
 class TeleportAbsoluteState(EventState):
     '''
@@ -59,7 +58,7 @@ class TeleportAbsoluteState(EventState):
     <= unavailable      Service is unavailable
     '''
 
-    def __init__(self, turtle_name='turtle1', x=0.0, y=0.0, theta=0.0, call_timeout=3.0, wait_timeout=3.0):
+    def __init__(self, turtle_name='turtle1', x=0.0, y=0.0, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'):
         # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
         super(TeleportAbsoluteState, self).__init__(outcomes = ['done', 'call_timeout', 'unavailable'])
 
@@ -78,11 +77,11 @@ class TeleportAbsoluteState(EventState):
         self._srv_topic = f'/{turtle_name}/{service_name}'
         self._srv_result = None
 
-        self._srv_request = TeleportAbsoluteRequest()
+        self._srv_request = TeleportAbsolute.Request()
         self._srv_request.x = x
         self._srv_request.y = y
         self._srv_request.theta = theta
-        
+
 
         self._error = None
 
@@ -145,5 +144,5 @@ class TeleportAbsoluteState(EventState):
             self._srv_result = self._srv.call_async(self._srv_topic, self._srv_request, wait_duration=None)
             self._start_time = self._node.get_clock().now()  # Reset timer for call timeout
             self._service_called = True
-       except Exception as e:
+        except Exception as e:
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(e)} - {str(e)}")

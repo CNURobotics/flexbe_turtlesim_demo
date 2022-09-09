@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Simple Turtlesim FlexBE Demo">
+
+	<executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.simple_turtlesim_flexbe_demo_sm" class="SimpleTurtlesimFlexBEDemoSM" />
+	<tagstring>Turtlesim</tagstring>
+	<author>David Conner</author>
+	<date>Fri Sep 09 2022</date>
+	<description>
+		Simple demonstration of FlexBE using ROS Turtlesim from ROS tutorials
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

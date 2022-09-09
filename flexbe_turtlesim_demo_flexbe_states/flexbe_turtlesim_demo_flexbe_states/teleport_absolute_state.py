@@ -78,7 +78,12 @@ class TeleportAbsoluteState(EventState):
         self._srv_topic = f'/{turtle_name}/{service_name}'
         self._srv_result = None
 
-        self._srv_request =
+        self._srv_request = TeleportAbsoluteRequest()
+        self._srv_request.x = x
+        self._srv_request.y = y
+        self._srv_request.theta = theta
+        
+
         self._error = None
 
         # Set up the proxy now, but do not wait on the service just yet

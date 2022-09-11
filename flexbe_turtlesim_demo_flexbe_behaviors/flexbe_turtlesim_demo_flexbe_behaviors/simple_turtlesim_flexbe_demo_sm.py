@@ -11,7 +11,7 @@ from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyC
 from flexbe_states.log_state import LogState
 from flexbe_states.operator_decision_state import OperatorDecisionState
 from flexbe_turtlesim_demo_flexbe_states.clear_turtlesim_state import ClearTurtlesimState
-from flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state import TeleportAbsoluteState as flexbe_turtlesim_demo_flexbe_states__TeleportAbsoluteState
+from flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state import TeleportAbsoluteState
 from flexbe_turtlesim_demo_flexbe_states.timed_twist_state import TimedCmdVelState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -56,6 +56,7 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 
 
 	def create(self):
+		cmd_vel = '/turtle1/cmd_vel'
 		# x:959 y:233
 		_state_machine = OperatableStateMachine(outcomes=['finished'])
 
@@ -64,14 +65,38 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 
 		# [/MANUAL_CREATE]
 
-		# x:545 y:72, x:130 y:365
+		# x:975 y:134, x:130 y:365
 		_sm_container_0 = OperatableStateMachine(outcomes=['finished', 'failed'])
 
 		with _sm_container_0:
 			# x:130 y:43
 			OperatableStateMachine.add('Forward0',
-										TimedCmdVelState(target_time=1.0, velocity=0.25, rotation_rate=0.0, cmd_topic='/turtle1/cmd_vel'),
+										TimedCmdVelState(target_time=4.0, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel),
+										transitions={'done': 'LeftTurn'},
+										autonomy={'done': Autonomy.Off})
+
+			# x:414 y:314
+			OperatableStateMachine.add('Forward1',
+										TimedCmdVelState(target_time=8, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel),
+										transitions={'done': 'RightTurn'},
+										autonomy={'done': Autonomy.Off})
+
+			# x:663 y:38
+			OperatableStateMachine.add('Forward2',
+										TimedCmdVelState(target_time=4.0, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel),
 										transitions={'done': 'finished'},
+										autonomy={'done': Autonomy.Off})
+
+			# x:179 y:211
+			OperatableStateMachine.add('LeftTurn',
+										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=0.666667, cmd_topic=cmd_vel),
+										transitions={'done': 'Forward1'},
+										autonomy={'done': Autonomy.Off})
+
+			# x:625 y:189
+			OperatableStateMachine.add('RightTurn',
+										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=-0.666667, cmd_topic=cmd_vel),
+										transitions={'done': 'Forward2'},
 										autonomy={'done': Autonomy.Off})
 
 
@@ -79,7 +104,7 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 		with _state_machine:
 			# x:178 y:77
 			OperatableStateMachine.add('Home',
-										flexbe_turtlesim_demo_flexbe_states__TeleportAbsoluteState(turtle_name='turtle1', x=5.544, y=5.544, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'),
+										TeleportAbsoluteState(turtle_name='turtle1', x=5.544, y=5.544, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'),
 										transitions={'done': 'AtHome', 'call_timeout': 'ServiceCallFailed', 'unavailable': 'Unavailable'},
 										autonomy={'done': Autonomy.Off, 'call_timeout': Autonomy.Off, 'unavailable': Autonomy.Off})
 

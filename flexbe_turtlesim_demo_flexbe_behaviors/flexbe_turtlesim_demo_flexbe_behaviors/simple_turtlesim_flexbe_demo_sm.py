@@ -10,7 +10,8 @@
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
 from flexbe_states.log_state import LogState
 from flexbe_states.operator_decision_state import OperatorDecisionState
-from flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state import TeleportAbsoluteState
+from flexbe_turtlesim_demo_flexbe_states.clear_turtlesim_state import ClearTurtlesimState
+from flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state import TeleportAbsoluteState as flexbe_turtlesim_demo_flexbe_states__TeleportAbsoluteState
 from flexbe_turtlesim_demo_flexbe_states.timed_twist_state import TimedCmdVelState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -39,6 +40,7 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 		ConcurrencyContainer.initialize_ros(node)
 		PriorityContainer.initialize_ros(node)
 		Logger.initialize(node)
+		ClearTurtlesimState.initialize_ros(node)
 		LogState.initialize_ros(node)
 		OperatorDecisionState.initialize_ros(node)
 		TeleportAbsoluteState.initialize_ros(node)
@@ -54,7 +56,7 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 
 
 	def create(self):
-		# x:885 y:139
+		# x:959 y:233
 		_state_machine = OperatableStateMachine(outcomes=['finished'])
 
 		# Additional creation code can be added inside the following tags
@@ -77,9 +79,27 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 		with _state_machine:
 			# x:178 y:77
 			OperatableStateMachine.add('Home',
-										TeleportAbsoluteState(turtle_name='turtle1', x=0.0, y=0.0, theta=0.0, call_timeout=3.0, wait_timeout=3.0),
+										flexbe_turtlesim_demo_flexbe_states__TeleportAbsoluteState(turtle_name='turtle1', x=5.544, y=5.544, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'),
 										transitions={'done': 'AtHome', 'call_timeout': 'ServiceCallFailed', 'unavailable': 'Unavailable'},
 										autonomy={'done': Autonomy.Off, 'call_timeout': Autonomy.Off, 'unavailable': Autonomy.Off})
+
+			# x:911 y:133
+			OperatableStateMachine.add('ClearFailed',
+										LogState(text="Failed to clear Turtlesim window!", severity=Logger.REPORT_HINT),
+										transitions={'done': 'Operator'},
+										autonomy={'done': Autonomy.Off})
+
+			# x:694 y:20
+			OperatableStateMachine.add('ClearLog',
+										LogState(text="Clear turtlesim window ...", severity=Logger.REPORT_HINT),
+										transitions={'done': 'ClearWindow'},
+										autonomy={'done': Autonomy.Off})
+
+			# x:893 y:15
+			OperatableStateMachine.add('ClearWindow',
+										ClearTurtlesimState(service_name='/clear', wait_timeout=3.0),
+										transitions={'done': 'Operator', 'failed': 'ClearFailed', 'unavailable': 'ClearFailed'},
+										autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'unavailable': Autonomy.Off})
 
 			# x:756 y:454
 			OperatableStateMachine.add('Container',
@@ -107,9 +127,9 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 
 			# x:651 y:133
 			OperatableStateMachine.add('Operator',
-										OperatorDecisionState(outcomes=["Home", "Eight", "Quit"], hint=None, suggestion=None),
-										transitions={'Home': 'GoHome', 'Eight': 'Container', 'Quit': 'finished'},
-										autonomy={'Home': Autonomy.Full, 'Eight': Autonomy.Low, 'Quit': Autonomy.Full})
+										OperatorDecisionState(outcomes=["Home", "Eight", "Quit", "Clear"], hint=None, suggestion=None),
+										transitions={'Home': 'GoHome', 'Eight': 'Container', 'Quit': 'finished', 'Clear': 'ClearLog'},
+										autonomy={'Home': Autonomy.Full, 'Eight': Autonomy.Low, 'Quit': Autonomy.Full, 'Clear': Autonomy.Off})
 
 			# x:449 y:171
 			OperatableStateMachine.add('ServiceCallFailed',

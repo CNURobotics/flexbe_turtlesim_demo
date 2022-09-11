@@ -40,32 +40,28 @@ from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
 
-from turtlesim.srv import TeleportAbsolute
+from std_srvs.srv import Empty
 
-class TeleportAbsoluteState(EventState):
+class ClearTurtlesimState(EventState):
     '''
-    This state teleports the Turtlesim turtle using TeleportAbsolute service.
+    This state clears the Turtlesim window using the /clear service.
 
-    -- turtle_name   string     Turtle name (default: `turtle1`)
-    -- x             float      x position (default: 0.0)
-    -- y             float      y position (default: 0.0)
-    -- theta         float      yaw orientation angle (default: 0.0)
-    -- call_timeout  float      Timeout for completion (default: 3.0 seconds)
+    This approach using the blocking call on enter.
+    This is generally NOT advised if there are any potential concurrent operations.
+
+    -- service_name   string    Service name (default: `/clear`)
     -- wait_timeout  float      Duration to wait for service to become available (default: 3.0 seconds)
-    -- service_name  string     Service name (default: `teleport_absolute`)
     <= done             Service call returned result as expected
-    <= call_timeout     Service call did not return result successfully
     <= unavailable      Service is unavailable
     '''
 
-    def __init__(self, turtle_name='turtle1', x=0.0, y=0.0, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'):
+    def __init__(self, service_name='/clear', wait_timeout=3.0):
         # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-        super(TeleportAbsoluteState, self).__init__(outcomes = ['done', 'call_timeout', 'unavailable'])
+        super(ClearTurtlesimState, self).__init__(outcomes = ['done', 'failed', 'unavailable'])
 
-        ProxyServiceCaller._initialize(TeleportAbsoluteState._node)
+        ProxyServiceCaller._initialize(ClearTurtlesimState._node)
 
         # Store state parameters for later use.
-        self._call_timeout = Duration(seconds=call_timeout)
         self._wait_timeout = Duration(seconds=wait_timeout)
 
         # The constructor is called when building the state machine, not when actually starting the behavior.
@@ -74,19 +70,15 @@ class TeleportAbsoluteState(EventState):
         self._return     = None # Track the outcome so we can detect if transition is blocked
         self._service_called = False
 
-        self._srv_topic = f'/{turtle_name}/{service_name}'
+        self._srv_topic = service_name
         self._srv_result = None
 
-        self._srv_request = TeleportAbsolute.Request()
-        self._srv_request.x = x
-        self._srv_request.y = y
-        self._srv_request.theta = theta
-
+        self._srv_request = Empty.Request()
 
         self._error = None
 
         # Set up the proxy now, but do not wait on the service just yet
-        self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=None)
+        self._srv = ProxyServiceCaller({self._srv_topic: Empty}, wait_duration=None)
 
 
     def execute(self, userdata):
@@ -98,24 +90,23 @@ class TeleportAbsoluteState(EventState):
             return self._return
 
         if self._service_called:
-            # Waiting for result.
-            # We will do this in a non-blocking way
-            if self._srv.done(self._srv_topic):
-                result = self._srv.result(self._srv_topic)
-                Logger.loginfo(f"{self._name}: Service {self._srv_topic} returned {result}!")
-                self._return = 'done'
+            # Called from on_enter
+            if self._srv_result is None:
+                Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
+                self._return = 'failed'
             else:
+                self._return = 'done'
 
-                if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._call_timeout.nanoseconds:
-                    # Failed to return call in timely manner
-                    self._return = 'call_timeout'
-                    Logger.logerr(f"{self._name}: Service {self._srv_topic} call timed out!")
         else:
             # Waiting for service to become available in non-blocking manner
             if self._srv.is_available(self._srv_topic, wait_duration=None):
-                Logger.loginfo(f"{self._name}: Service {self._srv_topic} is now available - making service call!")
+                Logger.loginfo(f"{self._name}: Service {self._srv_topic} is now available - making service call to clear!")
                 self._do_service_call()
-                # Process the result on next execute call (so some delay)
+                if self._srv_result is None:
+                    Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
+                    self._return = 'failed'
+                else:
+                    self._return = 'done'
             else:
                 if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._wait_timeout.nanoseconds:
                     # Failed to return call in timely manner
@@ -128,6 +119,7 @@ class TeleportAbsoluteState(EventState):
         # This method is called when the state becomes active, i.e. a transition from another state to this one is taken.
         self._start_time = self._node.get_clock().now()
         self._return     = None # reset the completion flag
+        self._srv_result = None
         self._service_called = False
         if self._srv.is_available(self._srv_topic, wait_duration=None):
             self._do_service_call()
@@ -137,12 +129,12 @@ class TeleportAbsoluteState(EventState):
 
     def _do_service_call(self):
         """
-        Make the service call using async non-blocking
+        Make the service call using synchronous blocking call
         """
         try:
             Logger.loginfo(f"{self._name}: Calling service {self._srv_topic} ...")
-            self._srv_result = self._srv.call_async(self._srv_topic, self._srv_request, wait_duration=None)
-            self._start_time = self._node.get_clock().now()  # Reset timer for call timeout
             self._service_called = True
+            self._srv_result = self._srv.call(self._srv_topic, self._srv_request, wait_duration=None)
         except Exception as e:
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(e)} - {str(e)}")
+            self._srv_result = None

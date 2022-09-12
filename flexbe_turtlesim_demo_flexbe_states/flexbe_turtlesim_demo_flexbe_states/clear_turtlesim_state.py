@@ -78,7 +78,7 @@ class ClearTurtlesimState(EventState):
         self._error = None
 
         # Set up the proxy now, but do not wait on the service just yet
-        self._srv = ProxyServiceCaller({self._srv_topic: Empty}, wait_duration=None)
+        self._srv = ProxyServiceCaller({self._srv_topic: Empty}, wait_duration=0.0)
 
 
     def execute(self, userdata):
@@ -87,10 +87,12 @@ class ClearTurtlesimState(EventState):
 
         if self._return:
             # We have completed the state, and therefore must be blocked by autonomy level
+            Logger.loginfo(f"{self._name}: returning existing value {self._return} .")
             return self._return
 
         if self._service_called:
             # Called from on_enter
+            Logger.loginfo(f"{self._name}: Service called  - check result {self._srv_result} .")
             if self._srv_result is None:
                 Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
                 self._return = 'failed'
@@ -99,8 +101,9 @@ class ClearTurtlesimState(EventState):
 
         else:
             # Waiting for service to become available in non-blocking manner
-            if self._srv.is_available(self._srv_topic, wait_duration=None):
-                Logger.loginfo(f"{self._name}: Service {self._srv_topic} is now available - making service call to clear!")
+            Logger.loginfo(f"{self._name}: Service not called - check if available {self._srv_topic} ...")
+            if self._srv.is_available(self._srv_topic, wait_duration=0.0):
+                Logger.localinfo(f"{self._name}: Service {self._srv_topic} is now available - making service call to clear!")
                 self._do_service_call()
                 if self._srv_result is None:
                     Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
@@ -121,10 +124,14 @@ class ClearTurtlesimState(EventState):
         self._return     = None # reset the completion flag
         self._srv_result = None
         self._service_called = False
-        if self._srv.is_available(self._srv_topic, wait_duration=None):
-            self._do_service_call()
-        else:
-            Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
+        try:
+            if self._srv.is_available(self._srv_topic, wait_duration=0.0):
+                Logger.loginfo(f"{self._name}: Service {self._srv_topic} is available ...")
+                self._do_service_call()
+            else:
+                Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
+        except Exception as exc:
+            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
 
 
     def _do_service_call(self):
@@ -134,7 +141,7 @@ class ClearTurtlesimState(EventState):
         try:
             Logger.loginfo(f"{self._name}: Calling service {self._srv_topic} ...")
             self._service_called = True
-            self._srv_result = self._srv.call(self._srv_topic, self._srv_request, wait_duration=None)
+            self._srv_result = self._srv.call(self._srv_topic, self._srv_request, wait_duration=0.0)
         except Exception as e:
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(e)} - {str(e)}")
             self._srv_result = None

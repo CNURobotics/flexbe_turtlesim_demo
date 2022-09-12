@@ -89,24 +89,24 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 
 			# x:179 y:211
 			OperatableStateMachine.add('LeftTurn',
-										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=0.666667, cmd_topic=cmd_vel),
+										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=0.65, cmd_topic=cmd_vel),
 										transitions={'done': 'Forward1'},
 										autonomy={'done': Autonomy.Off})
 
 			# x:625 y:189
 			OperatableStateMachine.add('RightTurn',
-										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=-0.666667, cmd_topic=cmd_vel),
+										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=-0.65, cmd_topic=cmd_vel),
 										transitions={'done': 'Forward2'},
 										autonomy={'done': Autonomy.Off})
 
 
 
 		with _state_machine:
-			# x:178 y:77
-			OperatableStateMachine.add('Home',
-										TeleportAbsoluteState(turtle_name='turtle1', x=5.544, y=5.544, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'),
-										transitions={'done': 'AtHome', 'call_timeout': 'ServiceCallFailed', 'unavailable': 'Unavailable'},
-										autonomy={'done': Autonomy.Off, 'call_timeout': Autonomy.Off, 'unavailable': Autonomy.Off})
+			# x:60 y:200
+			OperatableStateMachine.add('ClearEntry',
+										ClearTurtlesimState(service_name='/clear', wait_timeout=3.0),
+										transitions={'done': 'Home', 'failed': 'Home', 'unavailable': 'Unavailable'},
+										autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'unavailable': Autonomy.Off})
 
 			# x:911 y:133
 			OperatableStateMachine.add('ClearFailed',
@@ -150,11 +150,17 @@ class SimpleTurtlesimFlexBEDemoSM(Behavior):
 										transitions={'done': 'Home'},
 										autonomy={'done': Autonomy.Off})
 
+			# x:178 y:77
+			OperatableStateMachine.add('Home',
+										TeleportAbsoluteState(turtle_name='turtle1', x=5.544, y=5.544, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'),
+										transitions={'done': 'AtHome', 'call_timeout': 'ServiceCallFailed', 'unavailable': 'Unavailable'},
+										autonomy={'done': Autonomy.Off, 'call_timeout': Autonomy.Off, 'unavailable': Autonomy.Off})
+
 			# x:651 y:133
 			OperatableStateMachine.add('Operator',
-										OperatorDecisionState(outcomes=["Home", "Eight", "Quit", "Clear"], hint=None, suggestion=None),
+										OperatorDecisionState(outcomes=["Home", "Eight", "Quit", "Clear"], hint="Eight", suggestion="Eight"),
 										transitions={'Home': 'GoHome', 'Eight': 'Container', 'Quit': 'finished', 'Clear': 'ClearLog'},
-										autonomy={'Home': Autonomy.Full, 'Eight': Autonomy.Low, 'Quit': Autonomy.Full, 'Clear': Autonomy.Off})
+										autonomy={'Home': Autonomy.Full, 'Eight': Autonomy.High, 'Quit': Autonomy.Full, 'Clear': Autonomy.Full})
 
 			# x:449 y:171
 			OperatableStateMachine.add('ServiceCallFailed',

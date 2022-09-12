@@ -86,7 +86,7 @@ class TeleportAbsoluteState(EventState):
         self._error = None
 
         # Set up the proxy now, but do not wait on the service just yet
-        self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=None)
+        self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=0.0)
 
 
     def execute(self, userdata):
@@ -102,7 +102,7 @@ class TeleportAbsoluteState(EventState):
             # We will do this in a non-blocking way
             if self._srv.done(self._srv_topic):
                 result = self._srv.result(self._srv_topic)
-                Logger.loginfo(f"{self._name}: Service {self._srv_topic} returned {result}!")
+                Logger.localinfo(f"{self._name}: Service {self._srv_topic} returned {result}!")
                 self._return = 'done'
             else:
 
@@ -112,8 +112,8 @@ class TeleportAbsoluteState(EventState):
                     Logger.logerr(f"{self._name}: Service {self._srv_topic} call timed out!")
         else:
             # Waiting for service to become available in non-blocking manner
-            if self._srv.is_available(self._srv_topic, wait_duration=None):
-                Logger.loginfo(f"{self._name}: Service {self._srv_topic} is now available - making service call!")
+            if self._srv.is_available(self._srv_topic, wait_duration=0.0):
+                Logger.localinfo(f"{self._name}: Service {self._srv_topic} is now available - making service call!")
                 self._do_service_call()
                 # Process the result on next execute call (so some delay)
             else:
@@ -129,10 +129,13 @@ class TeleportAbsoluteState(EventState):
         self._start_time = self._node.get_clock().now()
         self._return     = None # reset the completion flag
         self._service_called = False
-        if self._srv.is_available(self._srv_topic, wait_duration=None):
-            self._do_service_call()
-        else:
-            Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
+        try:
+            if self._srv.is_available(self._srv_topic, wait_duration=0.0):
+                self._do_service_call()
+            else:
+                Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
+        except Exception as exc:
+            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
 
 
     def _do_service_call(self):
@@ -140,9 +143,9 @@ class TeleportAbsoluteState(EventState):
         Make the service call using async non-blocking
         """
         try:
-            Logger.loginfo(f"{self._name}: Calling service {self._srv_topic} ...")
-            self._srv_result = self._srv.call_async(self._srv_topic, self._srv_request, wait_duration=None)
+            Logger.localinfo(f"{self._name}: Calling service {self._srv_topic} ...")
+            self._srv_result = self._srv.call_async(self._srv_topic, self._srv_request, wait_duration=0.0)
             self._start_time = self._node.get_clock().now()  # Reset timer for call timeout
             self._service_called = True
-        except Exception as e:
-            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(e)} - {str(e)}")
+        except Exception as exc:
+            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")

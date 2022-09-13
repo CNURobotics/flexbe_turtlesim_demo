@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<behavior name="Simple Turtlesim FlexBE Demo">
+<behavior name="Simple FlexBE Turtlesim Demo">
 
-	<executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.simple_turtlesim_flexbe_demo_sm" class="SimpleTurtlesimFlexBEDemoSM" />
+	<executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.simple_flexbe_turtlesim_demo_sm" class="SimpleFlexBETurtlesimDemoSM" />
 	<tagstring>Turtlesim</tagstring>
 	<author>David Conner</author>
 	<date>Fri Sep 09 2022</date>

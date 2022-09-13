@@ -43,7 +43,7 @@ You can also replace the latter launch with
 This allows the FlexBE behavior engine to run on a separate computer from the UI.
 
 
-Load the `Simple Turtlesim FlexBE Demo` behavior from the FlexBE UI, and begin
+Load the `Simple FlexBE Turtlesim Demo` behavior from the FlexBE UI, and begin
 execution.  See the [FlexBE tutorials] for more  information about loading and launch behaviors.
 
 

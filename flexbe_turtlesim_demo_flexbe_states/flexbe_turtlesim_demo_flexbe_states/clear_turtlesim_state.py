@@ -52,6 +52,7 @@ class ClearTurtlesimState(EventState):
     -- service_name   string    Service name (default: `/clear`)
     -- wait_timeout  float      Duration to wait for service to become available (default: 3.0 seconds)
     <= done             Service call returned result as expected
+    <= failed           Service failed to return result
     <= unavailable      Service is unavailable
     '''
 
@@ -87,12 +88,12 @@ class ClearTurtlesimState(EventState):
 
         if self._return:
             # We have completed the state, and therefore must be blocked by autonomy level
-            Logger.loginfo(f"{self._name}: returning existing value {self._return} .")
+            #Logger.localinfo(f"{self._name}: returning existing value {self._return} .")
             return self._return
 
         if self._service_called:
             # Called from on_enter
-            Logger.loginfo(f"{self._name}: Service called  - check result {self._srv_result} .")
+            #Logger.localinfo(f"{self._name}: Service called  - check result {self._srv_result} .")
             if self._srv_result is None:
                 Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
                 self._return = 'failed'
@@ -101,12 +102,12 @@ class ClearTurtlesimState(EventState):
 
         else:
             # Waiting for service to become available in non-blocking manner
-            Logger.loginfo(f"{self._name}: Service not called - check if available {self._srv_topic} ...")
+            #Logger.localinfo(f"{self._name}: Service not called - check if {self._srv_topic} is available now ...")
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
                 Logger.localinfo(f"{self._name}: Service {self._srv_topic} is now available - making service call to clear!")
                 self._do_service_call()
                 if self._srv_result is None:
-                    Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
+                    Logger.logerr(f"{self._name}: Service {self._srv_topic} failed to return result!")
                     self._return = 'failed'
                 else:
                     self._return = 'done'
@@ -126,7 +127,7 @@ class ClearTurtlesimState(EventState):
         self._service_called = False
         try:
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
-                Logger.loginfo(f"{self._name}: Service {self._srv_topic} is available ...")
+                Logger.localinfo(f"{self._name}: Service {self._srv_topic} is available ...")
                 self._do_service_call()
             else:
                 Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
@@ -139,7 +140,7 @@ class ClearTurtlesimState(EventState):
         Make the service call using synchronous blocking call
         """
         try:
-            Logger.loginfo(f"{self._name}: Calling service {self._srv_topic} ...")
+            Logger.localinfo(f"{self._name}: Calling service {self._srv_topic} ...")
             self._service_called = True
             self._srv_result = self._srv.call(self._srv_topic, self._srv_request, wait_duration=0.0)
         except Exception as e:

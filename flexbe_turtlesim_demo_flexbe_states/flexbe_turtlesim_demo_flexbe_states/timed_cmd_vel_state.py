@@ -51,13 +51,17 @@ class TimedCmdVelState(EventState):
     -- target_time          float     Time which needs to have passed since the behavior started.
     -- velocity             float     Body velocity (m/s)
     -- rotation_rate        float     Angular rotation (radians/s)
-    -- cmd_topic            string    topic name of the robot velocity command (default: 'cmd_vel')
+    -- cmd_topic            string    Topic name of the robot velocity command (default: 'cmd_vel')
+    -- desired_rate         float     Desired state update rate (default: 50 Hz)
     <= done                 Given time has passed.
     '''
 
-    def __init__(self, target_time, velocity, rotation_rate, cmd_topic='cmd_vel'):
+    def __init__(self, target_time, velocity, rotation_rate, cmd_topic='cmd_vel', desired_rate=50):
         # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-        super(TimedCmdVelState, self).__init__(outcomes = ['done'])
+
+        # NOTE: Uses desired update rate added to ROS 2 version of FlexBE flexbe_core.ros_state
+        #  This state should run faster than default 10 Hz state update
+        super(TimedCmdVelState, self).__init__(outcomes = ['done'], desired_rate=desired_rate)
 
         ProxyPublisher._initialize(TimedCmdVelState._node)
 

@@ -61,7 +61,8 @@ class TimedCmdVelState(EventState):
 
         # NOTE: Uses desired update rate added to ROS 2 version of FlexBE flexbe_core.ros_state
         #  This state should run faster than default 10 Hz state update
-        super(TimedCmdVelState, self).__init__(outcomes = ['done'], desired_rate=desired_rate)
+        #  The outcomes must come last in kwargs list due to FlexBE UI parsing!
+        super(TimedCmdVelState, self).__init__( desired_rate=desired_rate, outcomes=['done'])
 
         ProxyPublisher._initialize(TimedCmdVelState._node)
 
@@ -95,11 +96,14 @@ class TimedCmdVelState(EventState):
 
         if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._target_time.nanoseconds:
             # Normal completion, do not bother repeating the publish
+            # We won't bother publishing a 0 command unless blocked (above)
+            # so that we can chain multiple motions together
             self._done = 'done'
             return 'done'
 
         # Normal operation
         if self._cmd_topic:
+            #Logger.localinfo(f"{self._name} : {self._twist}")  # For initial debugging
             self._pub.publish(self._cmd_topic, self._twist)
 
         return None

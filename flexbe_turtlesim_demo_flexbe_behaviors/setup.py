@@ -25,7 +25,7 @@ provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
         'console_scripts': [
             'example_behavior_sm = flexbe_turtlesim_demo_flexbe_behaviors.example_behavior_sm',
             'simple_turtlesim_behavior_sm = flexbe_turtlesim_demo_flexbe_behaviors.simple_turtlesim_behavior_sm',
-            'turn_rate = flexbe_turtlesim_demo_flexbe_behaviors.turn_rate'
+            'turn_rate = flexbe_turtlesim_demo_flexbe_behaviors.turn_rate:turn_rate'
         ],
     },
 )

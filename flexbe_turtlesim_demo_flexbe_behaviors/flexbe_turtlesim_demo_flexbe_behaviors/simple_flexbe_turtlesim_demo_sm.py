@@ -71,31 +71,31 @@ class SimpleFlexBETurtlesimDemoSM(Behavior):
 		with _sm_container_0:
 			# x:130 y:43
 			OperatableStateMachine.add('Forward0',
-										TimedCmdVelState(target_time=4.0, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
+										TimedCmdVelState(target_time=3.99, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
 										transitions={'done': 'LeftTurn'},
 										autonomy={'done': Autonomy.Off})
 
 			# x:414 y:314
 			OperatableStateMachine.add('Forward1',
-										TimedCmdVelState(target_time=8, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
+										TimedCmdVelState(target_time=7.99, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
 										transitions={'done': 'RightTurn'},
 										autonomy={'done': Autonomy.Off})
 
 			# x:663 y:38
 			OperatableStateMachine.add('Forward2',
-										TimedCmdVelState(target_time=4.0, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
+										TimedCmdVelState(target_time=3.99, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
 										transitions={'done': 'finished'},
 										autonomy={'done': Autonomy.Off})
 
 			# x:179 y:211
 			OperatableStateMachine.add('LeftTurn',
-										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=0.65, cmd_topic=cmd_vel, desired_rate=50),
+										TimedCmdVelState(target_time=5.77, velocity=0.5, rotation_rate=0.667, cmd_topic=cmd_vel, desired_rate=50),
 										transitions={'done': 'Forward1'},
 										autonomy={'done': Autonomy.Off})
 
 			# x:625 y:189
 			OperatableStateMachine.add('RightTurn',
-										TimedCmdVelState(target_time=5.7887, velocity=0.5, rotation_rate=-0.65, cmd_topic=cmd_vel, desired_rate=50),
+										TimedCmdVelState(target_time=5.77, velocity=0.5, rotation_rate=-0.667, cmd_topic=cmd_vel, desired_rate=50),
 										transitions={'done': 'Forward2'},
 										autonomy={'done': Autonomy.Off})
 

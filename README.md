@@ -1,7 +1,10 @@
-# flexbe_turtlesim_demo_behaviors
+# Flexbe Turtlesim Demonstration
 
 This repo contains all flexbe_turtlesim_demo-specific states and behaviors to
 provide a simple demonstration of FlexBE using the ROS [Turtlesim] packages.
+
+FlexBE includes both an *Onboard* robot control behavior executive and an 
+Operator Control Station (*OCS*) for supervisory control and *collaborative autonomy*.
 
 
 ## Installation
@@ -9,24 +12,24 @@ provide a simple demonstration of FlexBE using the ROS [Turtlesim] packages.
 In addition to the standard FlexBE flexbe_app and flexbe_behavior_engine packages,
 clone the following repo into your ROS workspace:
 
-    git clone https://github.com/FlexBE/flexbe_turtlesim_demo_behaviors.git  # if not already present
+    git clone https://github.com/FlexBE/flexbe_turtlesim_demo.git  # if not already present
 
 Make sure that the branches are consistent (e.g. `git checkout ros2-devel`)
 
 Install any required dependencies.
 
-    rosdep update
-    rosdep install --from-paths src --ignore-src
+  * `rosdep update`
+  * `rosdep install --from-paths src --ignore-src`
 
 
 Build your workspace:
 
-    colcon build
+  `colcon build`
 
 After sourcing the new setup as normally required, you must download the required `nwjs` binaries
 *before* you can run the FlexBE App:
 
-    ros2 run flexbe_app nwjs_install
+  `ros2 run flexbe_app nwjs_install`
 
   > Note: These are installed in the `install` folder.  If the `install` folder is deleted, then the `nwjs` binaries
   will need to be reinstalled with this script.
@@ -35,19 +38,47 @@ After sourcing the new setup as normally required, you must download the require
 
 Launch the Turtlesim node, FlexBE UI App, and Flexible Behavior engine
 
-    ros2 launch flexbe_turtlesim_demo_behaviors flexbe_turtlesim_demo.launch.py
-    ros2 launch flexbe_app flexbe_full.launch.py
+Quick start:
 
-You can also replace the latter launch with
+First, launch TurtleSim:
+  * `ros2 run  turtlesim turtlesim_node`
 
-    ros2 launch flexbe_app flexbe_ocs.launch.py
-    ros2 launch flexbe_onboard behavior_onboard.launch.py
+> Note: Unlike regular simulations such as `Gazebo`, `TurtleSim` does NOT 
+> publish a clock topic.  Therefore, do NOT set `use_sim_time:=True` with these demonstrations!
+> Without a clock, nothing gets published and so the system will appear hung.
 
-This allows the FlexBE behavior engine to run on a separate computer from the UI.
+Then start FlexBE using one (and only one) of the follow three blocks:
 
+* FlexBE Quickstart
+    * `ros2 launch flexbe_app flexbe_full.launch.py use_sim_time:=False`
+
+  This starts all of FlexBE including both the O
+* Launch the *OCS* and *Onboard* separately:
+    * `ros2 run  turtlesim turtlesim_node use_sim_time:=False`
+    * `ros2 launch flexbe_app flexbe_ocs.launch.py use_sim_time:=False`
+    * `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+
+* Launch each FlexBE component separately:
+  * *Onboard*
+    * `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+    ----
+  * *OCS*
+    * `ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False`
+    * `ros2 run flexbe_app run_app --ros-args --remap name:="flexbe_app" -p use_sim_time:=False`
+    * `ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
+
+The *OCS* components can be run on a separate computer from the *onboard* components.
 
 Using the FlexBE UI application, load the `Simple FlexBE Turtlesim Demo` behavior from the
 `flexbe_turtlesim_demo_flexbe_behaviors` package.
+
+Alternatively, you can preload and execute the behavior using the `flexbe_widget be_launcher` by 
+replacing the last command above with:
+  * `ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False -b "Simple FlexBE Turtlesim Demo"`
+
+  If following this approach, then you need to `Attach` the *OCS UI* to the running behavior.
+
+Examine the behavior in the FlexBE editor window.
 
 The `flexbe_turtlesim_demo_flexbe_states` includes custom state examples for:
 
@@ -64,6 +95,8 @@ See the [FlexBE tutorials] for more  information about loading and launch behavi
   > have not been updated for ROS 2; however, the
   > basic functionality is the same.
 
+This package also includes the `Example Behavior` that is described in the tutorials.
+
 
 ## Publications
 
@@ -72,7 +105,6 @@ Please use the following publications for reference when using FlexBE:
 - Philipp Schillinger, Stefan Kohlbrecher, and Oskar von Stryk, ["Human-Robot Collaborative High-Level Control with Application to Rescue Robotics"](http://dx.doi.org/10.1109/ICRA.2016.7487442), IEEE International Conference on Robotics and Automation (ICRA), Stockholm, Sweden, May 2016.
 
 - Joshua Zutell, David C. Conner and Philipp Schillinger, ["ROS 2-Based Flexible Behavior Engine for Flexible Navigation ,"](http://dx.doi.org/10.1109/SoutheastCon48659.2022.9764047), IEEE SouthEastCon, April 2022.
-
 
 
 -----

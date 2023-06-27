@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ###############################################################################
-#  Copyright (c) 2022
+#  Copyright (c) 2022-2023
 #  Capable Humanitarian Robotics and Intelligent Systems Lab (CHRISLab)
 #  Christopher Newport University
 #
@@ -35,15 +35,15 @@
 #       POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-import rclpy
 from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
 
 from turtlesim.srv import TeleportAbsolute
 
+
 class TeleportAbsoluteState(EventState):
-    '''
+    """
     This state teleports the Turtlesim turtle using TeleportAbsolute service.
 
     -- turtle_name   string     Turtle name (default: `turtle1`)
@@ -56,13 +56,14 @@ class TeleportAbsoluteState(EventState):
     <= done             Service call returned result as expected
     <= call_timeout     Service call did not return result successfully
     <= unavailable      Service is unavailable
-    '''
+    """
 
-    def __init__(self, turtle_name='turtle1', x=0.0, y=0.0, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'):
-        # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-        super(TeleportAbsoluteState, self).__init__(outcomes = ['done', 'call_timeout', 'unavailable'])
+    def __init__(self, turtle_name='turtle1', x=0.0, y=0.0, theta=0.0,
+                 call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'):
+        """Declare outcomes, input_keys, and output_keys by calling the EventState super constructor."""
+        super(TeleportAbsoluteState, self).__init__(outcomes=['done', 'call_timeout', 'unavailable'])
 
-        ProxyServiceCaller._initialize(TeleportAbsoluteState._node)
+        ProxyServiceCaller.initialize(TeleportAbsoluteState._node)
 
         # Store state parameters for later use.
         self._call_timeout = Duration(seconds=call_timeout)
@@ -71,7 +72,7 @@ class TeleportAbsoluteState(EventState):
         # The constructor is called when building the state machine, not when actually starting the behavior.
         # Thus, we cannot save the starting time now and will do so later.
         self._start_time = None
-        self._return     = None # Track the outcome so we can detect if transition is blocked
+        self._return = None  # Track the outcome so we can detect if transition is blocked
         self._service_called = False
 
         self._srv_topic = f'/{turtle_name}/{service_name}'
@@ -82,17 +83,17 @@ class TeleportAbsoluteState(EventState):
         self._srv_request.y = y
         self._srv_request.theta = theta
 
-
         self._error = None
 
         # Set up the proxy now, but do not wait on the service just yet
         self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=0.0)
 
-
     def execute(self, userdata):
-        # This method is called periodically while the state is active.
-        # If no outcome is returned, the state will stay active.
+        """
+        Execute this method periodically while the state is active.
 
+        If no outcome is returned, the state will stay active.
+        """
         if self._return:
             # We have completed the state, and therefore must be blocked by autonomy level
             return self._return
@@ -125,9 +126,13 @@ class TeleportAbsoluteState(EventState):
         return self._return
 
     def on_enter(self, userdata):
-        # This method is called when the state becomes active, i.e. a transition from another state to this one is taken.
+        """
+        Call this method when the state becomes active.
+
+        i.e. a transition from another state to this one is taken.
+        """
         self._start_time = self._node.get_clock().now()
-        self._return     = None # reset the completion flag
+        self._return = None  # reset the completion flag
         self._service_called = False
         try:
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
@@ -137,11 +142,8 @@ class TeleportAbsoluteState(EventState):
         except Exception as exc:
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
 
-
     def _do_service_call(self):
-        """
-        Make the service call using async non-blocking
-        """
+        """Make the service call using async non-blocking."""
         try:
             Logger.localinfo(f"{self._name}: Calling service {self._srv_topic} ...")
             self._srv_result = self._srv.call_async(self._srv_topic, self._srv_request, wait_duration=0.0)

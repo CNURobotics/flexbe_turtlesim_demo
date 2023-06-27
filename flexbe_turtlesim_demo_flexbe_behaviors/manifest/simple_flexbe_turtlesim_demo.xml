@@ -2,17 +2,17 @@
 
 <behavior name="Simple FlexBE Turtlesim Demo">
 
-	<executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.simple_flexbe_turtlesim_demo_sm" class="SimpleFlexBETurtlesimDemoSM" />
-	<tagstring>Turtlesim</tagstring>
-	<author>David Conner</author>
-	<date>Fri Sep 09 2022</date>
-	<description>
-		Simple demonstration of FlexBE using ROS Turtlesim from ROS tutorials
-	</description>
+    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.simple_flexbe_turtlesim_demo_sm" class="SimpleFlexBETurtlesimDemoSM" />
+    <tagstring>Turtlesim</tagstring>
+    <author>David Conner</author>
+    <date>Fri Sep 09 2022</date>
+    <description>
+        Simple demonstration of FlexBE using ROS Turtlesim from ROS tutorials
+    </description>
 
 
-	<!-- Contained Behaviors -->
+    <!-- Contained Behaviors -->
 
-	<!-- Available Parameters -->
+    <!-- Available Parameters -->
 
 </behavior>

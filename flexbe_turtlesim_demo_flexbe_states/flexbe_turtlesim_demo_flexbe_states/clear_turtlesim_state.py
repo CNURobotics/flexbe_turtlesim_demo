@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ###############################################################################
-#  Copyright (c) 2022
+#  Copyright (c) 2022-2023
 #  Capable Humanitarian Robotics and Intelligent Systems Lab (CHRISLab)
 #  Christopher Newport University
 #
@@ -35,15 +35,15 @@
 #       POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-import rclpy
 from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
 
 from std_srvs.srv import Empty
 
+
 class ClearTurtlesimState(EventState):
-    '''
+    """
     This state clears the Turtlesim window using the /clear service.
 
     This approach using the blocking call on enter.
@@ -54,13 +54,13 @@ class ClearTurtlesimState(EventState):
     <= done             Service call returned result as expected
     <= failed           Service failed to return result
     <= unavailable      Service is unavailable
-    '''
+    """
 
     def __init__(self, service_name='/clear', wait_timeout=3.0):
         # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-        super(ClearTurtlesimState, self).__init__(outcomes = ['done', 'failed', 'unavailable'])
+        super(ClearTurtlesimState, self).__init__(outcomes=['done', 'failed', 'unavailable'])
 
-        ProxyServiceCaller._initialize(ClearTurtlesimState._node)
+        ProxyServiceCaller.initialize(ClearTurtlesimState._node)
 
         # Store state parameters for later use.
         self._wait_timeout = Duration(seconds=wait_timeout)
@@ -68,7 +68,7 @@ class ClearTurtlesimState(EventState):
         # The constructor is called when building the state machine, not when actually starting the behavior.
         # Thus, we cannot save the starting time now and will do so later.
         self._start_time = None
-        self._return     = None # Track the outcome so we can detect if transition is blocked
+        self._return = None  # Track the outcome so we can detect if transition is blocked
         self._service_called = False
 
         self._srv_topic = service_name
@@ -81,19 +81,18 @@ class ClearTurtlesimState(EventState):
         # Set up the proxy now, but do not wait on the service just yet
         self._srv = ProxyServiceCaller({self._srv_topic: Empty}, wait_duration=0.0)
 
-
     def execute(self, userdata):
-        # This method is called periodically while the state is active.
+        # Execute this method periodically while the state is active.
         # If no outcome is returned, the state will stay active.
 
         if self._return:
             # We have completed the state, and therefore must be blocked by autonomy level
-            #Logger.localinfo(f"{self._name}: returning existing value {self._return} .")
+            # Logger.localinfo(f"{self._name}: returning existing value {self._return} .")
             return self._return
 
         if self._service_called:
             # Called from on_enter
-            #Logger.localinfo(f"{self._name}: Service called  - check result {self._srv_result} .")
+            # Logger.localinfo(f"{self._name}: Service called  - check result {self._srv_result} .")
             if self._srv_result is None:
                 Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
                 self._return = 'failed'
@@ -102,7 +101,7 @@ class ClearTurtlesimState(EventState):
 
         else:
             # Waiting for service to become available in non-blocking manner
-            #Logger.localinfo(f"{self._name}: Service not called - check if {self._srv_topic} is available now ...")
+            # Logger.localinfo(f"{self._name}: Service not called - check if {self._srv_topic} is available now ...")
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
                 Logger.localinfo(f"{self._name}: Service {self._srv_topic} is now available - making service call to clear!")
                 self._do_service_call()
@@ -120,9 +119,15 @@ class ClearTurtlesimState(EventState):
         return self._return
 
     def on_enter(self, userdata):
-        # This method is called when the state becomes active, i.e. a transition from another state to this one is taken.
+        """
+        Call when the state becomes active.
+
+        This example does NOT use any userdata passed from upstream states.
+
+        , i.e. a transition from another state to this one is taken.
+        """
         self._start_time = self._node.get_clock().now()
-        self._return     = None # reset the completion flag
+        self._return = None  # reset the completion flag
         self._srv_result = None
         self._service_called = False
         try:
@@ -134,11 +139,8 @@ class ClearTurtlesimState(EventState):
         except Exception as exc:
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
 
-
     def _do_service_call(self):
-        """
-        Make the service call using synchronous blocking call
-        """
+        """Make the service call using synchronous blocking call."""
         try:
             Logger.localinfo(f"{self._name}: Calling service {self._srv_topic} ...")
             self._service_called = True

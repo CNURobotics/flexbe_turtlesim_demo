@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os
 from setuptools import setup
 
 package_name = 'flexbe_turtlesim_demo_flexbe_behaviors'
@@ -17,8 +16,8 @@ setup(
     zip_safe=True,
     maintainer='David Conner',
     maintainer_email='robotics@cnu.edu',
-    description='flexbe_turtlesim_demo_flexbe_behaviors provides a collection of custom behaviors to
-provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
+    description='flexbe_turtlesim_demo_flexbe_behaviors provides a collection of custom '
+                'behaviors to provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
     license='BSD',
     tests_require=['pytest'],
     entry_points={

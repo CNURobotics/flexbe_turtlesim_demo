@@ -17,8 +17,8 @@ setup(
     zip_safe=True,
     maintainer='David Conner',
     maintainer_email='robotics@cnu.edu',
-    description='flexbe_turtlesim_demo_flexbe_states provides a collection of custom states to
-provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
+    description='flexbe_turtlesim_demo_flexbe_states provides a collection of custom states '
+                'to provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
     license='BSD',
     tests_require=['pytest'],
     entry_points={

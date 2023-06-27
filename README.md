@@ -54,7 +54,6 @@ Then start FlexBE using one (and only one) of the follow three blocks:
 
   This starts all of FlexBE including both the O
 * Launch the *OCS* and *Onboard* separately:
-    * `ros2 run  turtlesim turtlesim_node use_sim_time:=False`
     * `ros2 launch flexbe_app flexbe_ocs.launch.py use_sim_time:=False`
     * `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
 
@@ -74,7 +73,7 @@ Using the FlexBE UI application, load the `Simple FlexBE Turtlesim Demo` behavio
 
 Alternatively, you can preload and execute the behavior using the `flexbe_widget be_launcher` by 
 replacing the last command above with:
-  * `ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False -b "Simple FlexBE Turtlesim Demo"`
+  * `ros2 run flexbe_widget be_launcher -b "Simple FlexBE Turtlesim Demo" --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
 
   If following this approach, then you need to `Attach` the *OCS UI* to the running behavior.
 

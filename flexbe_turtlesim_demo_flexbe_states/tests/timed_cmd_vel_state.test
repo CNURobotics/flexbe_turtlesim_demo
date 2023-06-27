@@ -1,5 +1,5 @@
-path: flexbe_turtlesim_demo_flexbe_states.timed_twist_state
-class: TimedTwistState
+path: flexbe_turtlesim_demo_flexbe_states.timed_cmd_vel_state
+class: TimedCmdVelState
 
 import_only: false
 

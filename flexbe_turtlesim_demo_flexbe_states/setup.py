@@ -1,17 +1,21 @@
 #!/usr/bin/env python
+from glob import glob
+
 from setuptools import setup
 from setuptools import find_packages
 
-package_name = 'flexbe_turtlesim_demo_flexbe_states'
+PACKAGE_NAME = 'flexbe_turtlesim_demo_flexbe_states'
 
 setup(
-    name=package_name,
-    version='1.3.1',
+    name=PACKAGE_NAME,
+    version='0.0.0',
     packages=find_packages(),
     data_files=[
         ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
+            ['resource/' + PACKAGE_NAME]),
+        ('share/' + PACKAGE_NAME, ['package.xml']),
+        ('share/' + PACKAGE_NAME + "/tests", glob('tests/*.test')),
+        ('share/' + PACKAGE_NAME + "/launch", glob('tests/*.launch.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

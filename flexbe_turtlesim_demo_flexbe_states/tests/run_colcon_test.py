@@ -27,14 +27,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 
-"""Pytest testing for flexbe_turtlesim_flexbe_states."""
+"""Pytest testing for flexbe_turtlesim_demo_flexbe_states."""
 
 
 from flexbe_testing.py_tester import PyTester
 
 
 class TestFlexBETurtleSimDemoStates(PyTester):
-    """Pytest testing for flexbe_turtlesim_flexbe_states."""
+    """Pytest testing for flexbe_turtlesim_demo_flexbe_states."""
 
     def __init__(self, *args, **kwargs):
         """Initialize unit test."""
@@ -43,7 +43,7 @@ class TestFlexBETurtleSimDemoStates(PyTester):
     @classmethod
     def setUpClass(cls):
 
-        PyTester._package = "flexbe_turtlesim_flexbe_states"
+        PyTester._package = "flexbe_turtlesim_demo_flexbe_states"
         PyTester._tests_folder = "tests"
 
         super().setUpClass()  # Do this last after setting package and tests folder
@@ -54,12 +54,16 @@ class TestFlexBETurtleSimDemoStates(PyTester):
         self.run_test("example_state")
 
     def test_teleport_absolute_state(self):
-        """Run FlexBE unit test given .test file."""
-        self.run_test("teleport_absolute_state")
+        """
+        Run FlexBE unit test given .test file.
+        
+        This test requires longer wait than normal
+        """
+        self.run_test("teleport_absolute_state", timeout_sec=2.0, max_cnt=5000)
 
-    def test_timed_twist_state(self):
+    def test_timed_cmd_vel_statestate(self):
         """Run FlexBE unit test given .test file."""
-        self.run_test("timed_twist_state")
+        self.run_test("timed_cmd_vel_state", timeout_sec=2.0, max_cnt=5000)
 
     # def test_wait_state_short(self):
     #     """

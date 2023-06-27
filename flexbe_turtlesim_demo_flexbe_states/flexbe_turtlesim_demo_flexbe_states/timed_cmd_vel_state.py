@@ -36,7 +36,7 @@
 ###############################################################################
 
 from rclpy.duration import Duration
-from flexbe_core import EventState
+from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyPublisher
 
 from geometry_msgs.msg import Twist
@@ -74,7 +74,7 @@ class TimedCmdVelState(EventState):
         # Thus, we cannot save the starting time now and will do so later.
         self._start_time = None
 
-        self._done = None  # Track the outcome so we can detect if transition is blocked
+        self._return = None  # Track the outcome so we can detect if transition is blocked
 
         self._twist = Twist()
         self._twist.linear.x = velocity
@@ -93,24 +93,25 @@ class TimedCmdVelState(EventState):
 
         If no outcome is returned, the state will stay active.
         """
-        if (self._done):
+        if self._return:
             # We have completed the state, and therefore must be blocked by autonomy level
             # Stop the robot, but and return the prior outcome
             if self._cmd_topic:
                 self._pub.publish(self._cmd_topic, Twist())
 
-            return self._done
+            return self._return
 
         if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._target_time.nanoseconds:
             # Normal completion, do not bother repeating the publish
             # We won't bother publishing a 0 command unless blocked (above)
             # so that we can chain multiple motions together
-            self._done = 'done'
+            self._return = 'done'
+            Logger.localinfo(f"{self._name} : returning 'done'")  # For initial debugging
             return 'done'
 
         # Normal operation
         if self._cmd_topic:
-            # Logger.localinfo(f"{self._name} : {self._twist}")  # For initial debugging
+            Logger.localinfo(f"{self._name} : {self._twist}")  # For initial debugging
             self._pub.publish(self._cmd_topic, self._twist)
 
         return None
@@ -122,4 +123,4 @@ class TimedCmdVelState(EventState):
         i.e. a transition from another state to this one is taken.
         """
         self._start_time = self._node.get_clock().now()
-        self._done = None  # reset the completion flag
+        self._return = None  # reset the completion flag

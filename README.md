@@ -62,8 +62,7 @@ Then start FlexBE using one (and only one) of the follow three blocks:
   This will launch the `Simple FlexBE Turtlesim Demo`, which will move the turtle through a series of motions to generate 
   a figure 8 pattern in full autonomy mode.
 
-[TurtleSim Figure 8](img/figure8.png)
-<img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'Simple FlexBE Turtlesim Demo' behavior." width="500">
+<img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'Simple FlexBE Turtlesim Demo' behavior." width="250">
 
   We will discuss *"Attaching"* the user interface later.
 
@@ -106,23 +105,21 @@ The *OCS* components can be run on a separate computer from the *onboard* compon
 
 ## Controling Behaviors Via FlexBE UI
 
-Using the FlexBE UI application dashboard, load the `Simple FlexBE Turtlesim Demo` behavior from the
-`flexbe_turtlesim_demo_flexbe_behaviors` package.
+Using the FlexBE UI application *Behavior Dashboard*, select *Load Behavior* from the upper middle tool bar, and 
+select the `flexbe_turtlesim_demo_flexbe_behaviors` package from dropdown, and the `Simple FlexBE Turtlesim Demo`.
 
-<img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="500">
+<img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="250">
+<img src="img/editor_view.png" alt="State machine editor view" width="250">
 
-----
-
-The state machine editor tab is used to inspect or edit existing behaviors, or build new ones.  
-The `Simple FlexBE Turtlesim Demo` behavior is shown below.
-
-<img src="img/editor_view.png" alt="State machine editor view" width="500">
+The *Statemachine Editor* tab is used to inspect or edit existing behaviors, or build new ones.  
+The `Simple FlexBE Turtlesim Demo` behavior is shown above.
 
 
-The `flexbe_turtlesim_demo_flexbe_states` includes custom state examples for:
 
-  * `clear_turtlesim_state` - clear the turtlesim window using a blocking service call
-  * `teleport_absolute_state` - go to home position using a non-blocking service call
+The `flexbe_turtlesim_demo_flexbe_states` package includes custom state examples for:
+
+  * `clear_turtlesim_state` - clear the turtlesim window using a *blocking* service call
+  * `teleport_absolute_state` - go to home position using a *non-blocking* service call
   * `timed_cmd_vel_state` - publish command velocity using a specified desired update rate
 
     > NOTE: The desired state update rate is only best effort.  FlexBE is NOT a real time controller, and
@@ -130,10 +127,10 @@ The `flexbe_turtlesim_demo_flexbe_states` includes custom state examples for:
 
 ----
 
-The Runtime view allows the operator to launch behaviors on the onboard syste, and monitor their execution.
+The *Runtime Control* tab allows the operator to launch behaviors on the onboard syste, and monitor their execution.
 
-<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="500">
-<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="500">
+<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="250">
+<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="250">
 
 ----
 

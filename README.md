@@ -43,7 +43,8 @@ Quick start:
 For each command, we assume the ROS environment is set up in the terminal using `setup.bash` after a build.
 
 First, launch TurtleSim:
-  * `ros2 run  turtlesim turtlesim_node`
+  
+`ros2 run  turtlesim turtlesim_node`
 
 > Note: Unlike regular simulations such as `Gazebo`, `TurtleSim` does NOT 
 > publish a `\clock` topic to ROS.  Therefore, do NOT set `use_sim_time:=True` with these demonstrations!
@@ -53,8 +54,10 @@ First, launch TurtleSim:
 Then start FlexBE using one (and only one) of the follow three blocks:
 
 * FlexBE Quickstart of behaviors with full autonomy 
-    - `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
-    - `ros2 run flexbe_widget be_launcher -b "Simple FlexBE Turtlesim Demo" --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
+
+`ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+
+`ros2 run flexbe_widget be_launcher -b "Simple FlexBE Turtlesim Demo" --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
 
   This will launch the `Simple FlexBE Turtlesim Demo`, which will move the turtle through a series of motions to generate 
   a figure 8 pattern in full autonomy mode.
@@ -72,24 +75,32 @@ There are 3 approaches to launching the full FlexBE suite for operator supervise
 Use one (and only one of the approaches):
 
 1) FlexBE Quickstart
-    `ros2 launch flexbe_app flexbe_full.launch.py use_sim_time:=False`
+
+`ros2 launch flexbe_app flexbe_full.launch.py use_sim_time:=False`
 
   This starts all of FlexBE including both the *OCS* and *Onboard* software.
 
 2) Launch the *OCS* and *Onboard* separately:
-    `ros2 launch flexbe_app flexbe_ocs.launch.py use_sim_time:=False`
-    `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+
+`ros2 launch flexbe_app flexbe_ocs.launch.py use_sim_time:=False`
+
+`ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
 
   This allows running the *Onboard* software *on board* the robot, and the *OCS* software on a separate machine.
 
 3) Launch each FlexBE component separately:
   * *Onboard*
-    * `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
-    ----
+
+  `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+
+  ----
   * *OCS*
-    * `ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False`
-    * `ros2 run flexbe_app run_app --ros-args --remap name:="flexbe_app" -p use_sim_time:=False`
-    * `ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
+
+  `ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False`
+  
+  `ros2 run flexbe_app run_app --ros-args --remap name:="flexbe_app" -p use_sim_time:=False`
+  
+  `ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
 
 The *OCS* components can be run on a separate computer from the *onboard* components.
 

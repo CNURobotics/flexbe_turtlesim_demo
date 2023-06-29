@@ -66,9 +66,8 @@ Then start FlexBE using one (and only one) of the follow three blocks:
 
  > Note: Clicking on any image will give the high resolution view.
 
-
-  We will discuss *"Attaching"* the user interface later.
-
+----
+ 
   For now, just `Ctrl-C` to end the `behavior_onboard` and `be_launcher` nodes, and move on to the next demos.
 
 Ensure that a `turtlesim` window is open via the `ros2 run  turtlesim turtlesim_node`.
@@ -157,8 +156,15 @@ which publishes a fixed command velocity as a [Twist](https://docs.ros2.org/late
 
 <img src="img/timed_cmd_vel.png" alt="State parameters." width="250">
 
+----
 
+TODO write ups:
 
+ * Discuss FlexBE data flow in context of Turtlesim demo
+ * Discuss state implementation details 
+ * Discuss generated SM code 
+ * Discussed advanced operations such as "Attaching" to a running behavior.
+ * FAQ and debugging help.
 
 ----
 
@@ -166,6 +172,7 @@ See the [FlexBE tutorials] for more  information about loading and launch behavi
 
 This package also includes a simple `Example Behavior` that is described in the FlexBE tutorials.
 
+----
 
 ## Publications
 

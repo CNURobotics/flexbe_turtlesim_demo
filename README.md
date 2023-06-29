@@ -108,8 +108,8 @@ The *OCS* components can be run on a separate computer from the *onboard* compon
 Using the FlexBE UI application *Behavior Dashboard*, select *Load Behavior* from the upper middle tool bar, and 
 select the `flexbe_turtlesim_demo_flexbe_behaviors` package from dropdown, and the `Simple FlexBE Turtlesim Demo`.
 
-<img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="250">
-<img src="img/editor_view.png" alt="State machine editor view" width="250">
+<img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="350">
+<img src="img/editor_view.png" alt="State machine editor view" width="350">
 
 The *Statemachine Editor* tab is used to inspect or edit existing behaviors, or build new ones.  
 The `Simple FlexBE Turtlesim Demo` behavior is shown above.
@@ -129,8 +129,29 @@ The `flexbe_turtlesim_demo_flexbe_states` package includes custom state examples
 
 The *Runtime Control* tab allows the operator to launch behaviors on the onboard syste, and monitor their execution.
 
-<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="250">
-<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="250">
+<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="350">
+<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="350">
+
+Click on the "Eight" transition to make one loop in the figure 8 pattern.  After completion it will bring you back 
+to the *Operator Decision* state.  From there you can choose "Home" to recenter your turtle, or "Clear" to 
+clear the path trace, or "Eight" to do another loop, or "Quit" to complete the statemachine behavior and exit the 
+runtime control.
+
+FlexBE supports variable autonomy levels, so choosing "Full" autonomy allows the system to automatically choose to 
+repeat the "Eight" transition.
+
+<img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="500">
+
+This is based on the settings in the *Operator Decision State.  By allowing a transition to "Eight" with only "High" autonomy, 
+setting the executive to "Full" autonomy allows the automatic transition.
+
+<img src="img/decision_state_settings.png" alt="Settings for operator decision state." width="350">
+<img src="img/hfsm_container_sub_sm.png" alt="HFSM sub state machine." width="350">
+
+FlexBE supports Hierarchical Finite State Machines (HFSM) so that the "Container" state is actually a (simple) state machine that executes the figure 8 pattern using the provided FlexBE state implementations 
+such as the [Time Cmd Velocity State](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py)
+
+
 
 ----
 

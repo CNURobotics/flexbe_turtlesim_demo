@@ -64,6 +64,9 @@ Then start FlexBE using one (and only one) of the follow three blocks:
 
 <img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'Simple FlexBE Turtlesim Demo' behavior." width="250">
 
+ > Note: Clicking on any image will give the high resolution view.
+
+
   We will discuss *"Attaching"* the user interface later.
 
   For now, just `Ctrl-C` to end the `behavior_onboard` and `be_launcher` nodes, and move on to the next demos.
@@ -149,7 +152,11 @@ setting the executive to "Full" autonomy allows the automatic transition.
 <img src="img/hfsm_container_sub_sm.png" alt="HFSM sub state machine." width="350">
 
 FlexBE supports Hierarchical Finite State Machines (HFSM) so that the "Container" state is actually a (simple) state machine that executes the figure 8 pattern using the provided FlexBE state implementations 
-such as the [Time Cmd Velocity State](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py)
+such as the [Timed Cmd Velocity State](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py) 
+which publishes a fixed command velocity as a [Twist](https://docs.ros2.org/latest/api/geometry_msgs/msg/TwistStamped.html) (forward speed and turning rate) for a given time duration.  The specific parameters are set in the FlexBE Editor by clicking on a particular state; the "Left Turn" state values are shown below.
+
+<img src="img/timed_cmd_vel.png" alt="State parameters." width="250">
+
 
 
 

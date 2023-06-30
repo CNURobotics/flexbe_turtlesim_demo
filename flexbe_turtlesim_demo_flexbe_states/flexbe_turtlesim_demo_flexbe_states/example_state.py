@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-"""Demo state."""
-import rclpy
+"""Demonstration state."""
+from rclpy.constants import S_TO_NS
+from rclpy.duration import Duration
 
 from flexbe_core import EventState, Logger
 
@@ -12,7 +13,10 @@ class ExampleState(EventState):
 
     All FlexBE states should inherit from EventState.
 
-    This example lets the behavior wait until the given target_time has passed since the behavior has been started.
+    This example lets the behavior wait until the given target_time has passed since
+    entering the state.
+
+    The state also records the time the behavior was activated and exited.
 
     The UI parses this description for data about the state to diplay.
 
@@ -20,23 +24,59 @@ class ExampleState(EventState):
     -- target_time     float     Time which needs to have passed since the behavior started.
 
     List labeled outcomes using the double arrow notation (must match constructor)
-    <= continue        Given time has passed.
+    <= done            Given time has passed.
     <= failed          Example for a failure outcome.
 
-    List input and output user data that is passes along using <TODO>
+    List input and output user data that is passes along using
+        These are optional and not included in this example.
     """
 
     def __init__(self, target_time):
         """Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments."""
-        super().__init__(outcomes=['continue', 'failed'])
+        super().__init__(outcomes=['done', 'failed'])
 
         # Store state parameter for later use.
-        self._target_time = rclpy.Duration(target_time)
+        self._target_wait_time = Duration(seconds=target_time)
 
         # The constructor is called when building the state machine, not when actually starting the behavior.
         # Thus, we cannot save the starting time now and will do so later.
-        self._start_time = None
+        self._state_start_time = None
+        self._state_enter_time = None
+        self._state_exit_time = None
 
+        self._elapsed_time = Duration(nanoseconds=2**63 - 1)
+
+    @property
+    def elapsed_seconds(self):
+        """Log elapsed time since start as simple string."""
+        return f"{self._elapsed_time.nanoseconds/S_TO_NS:.3f}"
+
+    @property
+    def target_seconds(self):
+        """Log target wait time as a simple string."""
+        return f"{self._target_wait_time.nanoseconds/S_TO_NS:.3f}"
+
+    @property
+    def start_time(self):
+        """Log state start time (NOT enter time!) as a simple string."""
+        return f"{self._state_start_time.nanoseconds/S_TO_NS:.3f}"
+
+    @property
+    def exit_time(self):
+        """Log state exit time as a simple string."""
+        return f"{self._state_exit_time.nanoseconds/S_TO_NS:.3f}"
+
+    @property
+    def clock_time(self):
+        """Log system time in 1 hour increments using simple string."""
+        time_msg = self._node.get_clock().now().to_msg()
+        time = time_msg.sec % 3600 + time_msg.nanosec/S_TO_NS
+        return f"{time:.3f}"
+    
+    # Standard methods of EventState
+    # Normally we override on_enter, execute, and on_exit.
+    # Also demonstrating on_start and on_stop here
+    # This example includes more logging than normally used for demonstration.
     def execute(self, userdata):
         """
         Execute this method periodically while the state is active.
@@ -44,11 +84,34 @@ class ExampleState(EventState):
         Main purpose is to check state conditions and trigger a corresponding outcome.
         If no outcome is returned, the state will stay active.
         """
+        if self._return is not None:
+            # We must be blocked by autonomy level.
+            # Here we will just return the prior outcome and not recalculate 
+
+            # Local info is NOT sent to the UI, and only shown in logs and terminal
+            Logger.localinfo(f"execute blocked for '{self._name}' state @ {self.clock_time} "
+                        f"- use prior return code={self._return}")
+            return self._return
+        
+        # Normal calculation block
         try:
-            if ExampleState._node.get_clock().now() - self._start_time > self._target_time:
-                return 'continue'  # One of the outcomes declared above.
+            self._elapsed_time = ExampleState._node.get_clock().now() - self._state_enter_time
+            if self._elapsed_time >= self._target_wait_time:
+                Logger.loginfo(f"execute for '{self._name}' state @ {self.clock_time} "
+                               f"- done waiting at {self.elapsed_seconds} seconds.")
+                self._return = 'done'
+                return 'done'  # One of the outcomes declared above.
         except Exception:  # pylint:disable=W0703
+            # Something went wrong
+            Logger.logerr(f"execute for '{self._name}' state @ {self.clock_time} "
+                           f"- something went wrong after {self.elapsed_seconds} seconds.")
+            self._return = 'failed'
             return 'failed'
+
+        # Local info is NOT sent to the UI, and only shown in logs and terminal
+        Logger.localinfo(f"execute for '{self._name}' state @ {self.clock_time} "
+                        f"- {self.elapsed_seconds} seconds since start.")
+        return None  # This is normal behavior for state to continue executing
 
     def on_enter(self, userdata):
         """
@@ -60,10 +123,12 @@ class ExampleState(EventState):
         The following code is just for illustrating how the behavior logger works.
         Text logged by the behavior logger is sent to the operator and displayed in the GUI.
         """
-        time_to_wait = (self._target_time - (ExampleState._node.get_clock().now() - self._start_time)).to_sec()
-
-        if time_to_wait > 0:
-            Logger.loginfo('Need to wait for %.1f seconds.' % time_to_wait)
+        self._state_enter_time = ExampleState._node.get_clock().now()
+        self._elapsed_time = Duration(seconds=0.0)
+        self._return = None  # Clear return code on entry
+        
+        Logger.loginfo(f"on_enter for '{self._name}' state @ {self.clock_time} "
+                           f"- need to wait for {self._elapsed_time} more seconds.")
 
     def on_exit(self, userdata):
         """
@@ -72,16 +137,21 @@ class ExampleState(EventState):
         It can be used to stop possibly running processes started by on_enter.
         Nothing to do in this example.
         """
+        self._state_exit_time = ExampleState._node.get_clock().now()
+        Logger.loginfo(f"on_exit for '{self._name}' state @ {self.clock_time} "
+                       f"elapsed time = {self.elapsed_seconds} seconds.")
 
     def on_start(self):
         """
-        Call this method when the behavior is started.
+        Call this method when the behavior is instantiated on board.
 
         If possible, it is generally better to initialize used resources in the constructor
         because if anything failed, the behavior would not even be started.
         In this example, we use this event to set the correct start time.
         """
-        self._start_time = ExampleState._node.get_clock().now()
+        self._state_start_time = ExampleState._node.get_clock().now()
+        Logger.loginfo(f"on_start for '{self._name}' state @ {self.start_time} seconds "
+                       f" time to wait = {self.target_seconds} seconds..")
 
     def on_stop(self):
         """
@@ -90,3 +160,10 @@ class ExampleState(EventState):
         Use this event to clean up things like claimed resources.
         Nothing to do in this example.
         """
+        self._elapsed_time = ExampleState._node.get_clock().now() - self._state_start_time
+        Logger.loginfo(f"on_stop for '{self._name}' state @ {self.clock_time} seconds "
+                       f" total behavior instance elapsed time = {self.elapsed_seconds} seconds ")
+        
+        self._elapsed_time = self._state_exit_time - self._state_enter_time
+        Logger.loginfo(f"    '{self._name}' state "
+                       f"was active (enter-to-exit) for {self.elapsed_seconds} seconds.")

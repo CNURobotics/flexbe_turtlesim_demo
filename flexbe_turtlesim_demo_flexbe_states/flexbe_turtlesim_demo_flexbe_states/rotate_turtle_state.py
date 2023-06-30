@@ -1,12 +1,14 @@
 #!/usr/bin/env python
+from rclpy.duration import Duration
+
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyActionClient
 
 # example import of required action
-from chores.msg import DoDishesAction, DoDishesGoal
+from turtlesim.action import RotateAbsolute
 
 
-class ExampleActionState(EventState):
+class RotateTurtleState(EventState):
     """
     Actionlib actions are the most common basis for state implementations.
 
@@ -16,50 +18,49 @@ class ExampleActionState(EventState):
     State implementations should be lightweight and non-blocking so that they execute() completes within the
     desired update period.
 
-    <TODO> - This example is woefully incomplete and should use turtlesim if possible.
+    The ROS 2 action library provides a non-blocking, high-level interface for robot capabilities.
 
-    The ROS action library provides a non-blocking, high-level interface for robot capabilities.
-    The example is based on the DoDishes-example of actionlib (see http://wiki.ros.org/actionlib).
-    This time we have input and output keys in order to specify the goal
-    and possibly further evaluate the result in a later state.
+    Elements define here for UI
+    Parameters
+    -- timeout             Maximum time allowed (seconds)
+    -- action_topic        Name of action to invoke
 
-    -- dishes_to_do int     Expected amount of dishes to be cleaned.
+    Outputs
+    <= rotation_complete   Only a few dishes have been cleaned.
+    <= failed              Failed for some reason.
+    <= canceled            User canceled before completion
 
-    ># dishwasher     int     ID of the dishwasher to be used.
-
-    #> cleaned         int     Amount of cleaned dishes.
-
-    <= cleaned_some         Only a few dishes have been cleaned.
-    <= cleaned_enough        Cleaned a lot of dishes.
-    <= command_error        Cannot send the action goal.
+    User data
+    ># angle     float     Desired rotational angle in (degrees) (Input)
+    #> duration  float     Amount time taken to complete rotation (seconds) (Output)
 
     """
 
-    def __init__(self, dishes_to_do):
+    def __init__(self, timeout, action_topic="/turtle1/rotate_absolute"):
         # See example_state.py for basic explanations.
-        super(ExampleActionState, self).__init__(outcomes=['cleaned_some', 'cleaned_enough', 'command_error'],
-                                                 input_keys=['dishwasher'],
+        super().__init__(outcomes=['rotation_complete', 'failed', 'canceled'],
+                                                 input_keys=['angle'],
                                                  output_keys=['cleaned'])
-        self._dishes_to_do = dishes_to_do
+        self._timeout = Duration(seconds=timeout)
+        self._topic = action_topic
 
         # Create the action client when building the behavior.
-        # This will cause the behavior to wait for the client before starting execution
-        # and will trigger a timeout error if it is not available.
         # Using the proxy client provides asynchronous access to the result and status
         # and makes sure only one client is used, no matter how often this state is used in a behavior.
-        ProxyActionClient.initialize(ExampleActionState._node)
-        self._topic = 'do_dishes'
-        self._client = ProxyActionClient({self._topic: DoDishesAction})  # pass required clients as dict (topic: type)
+        ProxyActionClient.initialize(RotateTurtleState._node)
+
+        self._client = ProxyActionClient({self._topic: RotateAbsolute})  # pass required clients as dict (topic: type)
 
         # It may happen that the action client fails to send the action goal.
         self._error = False
+        self._return = None  # Retain return value in case the outcome is blocked by operator
 
     def execute(self, userdata):
         # While this state is active, check if the action has been finished and evaluate the result.
 
         # Check if the client failed to send the goal.
         if self._error:
-            return 'command_error'
+            return 'failed'
 
         # Check if the action has been finished
         if self._client.has_result(self._topic):

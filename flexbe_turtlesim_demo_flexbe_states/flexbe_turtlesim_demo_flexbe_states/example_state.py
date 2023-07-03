@@ -62,6 +62,11 @@ class ExampleState(EventState):
         return f"{self._state_start_time.nanoseconds/S_TO_NS:.3f}"
 
     @property
+    def enter_time(self):
+        """Log state enter time as a simple string."""
+        return f"{self._state_enter_time.nanoseconds/S_TO_NS:.3f}"
+
+    @property
     def exit_time(self):
         """Log state exit time as a simple string."""
         return f"{self._state_exit_time.nanoseconds/S_TO_NS:.3f}"
@@ -128,7 +133,7 @@ class ExampleState(EventState):
         self._return = None  # Clear return code on entry
         
         Logger.loginfo(f"on_enter for '{self._name}' state @ {self.clock_time} "
-                           f"- need to wait for {self._elapsed_time} more seconds.")
+                           f"- need to wait for {self.target_seconds} seconds.")
 
     def on_exit(self, userdata):
         """
@@ -163,7 +168,13 @@ class ExampleState(EventState):
         self._elapsed_time = ExampleState._node.get_clock().now() - self._state_start_time
         Logger.loginfo(f"on_stop for '{self._name}' state @ {self.clock_time} seconds "
                        f" total behavior instance elapsed time = {self.elapsed_seconds} seconds ")
-        
-        self._elapsed_time = self._state_exit_time - self._state_enter_time
-        Logger.loginfo(f"    '{self._name}' state "
-                       f"was active (enter-to-exit) for {self.elapsed_seconds} seconds.")
+        if self._state_enter_time is None:
+            Logger.loginfo(f"on_stop for '{self._name}' state @ {self.clock_time} seconds "
+                       f" - never entered the state to execute! ")
+        else:
+            try:
+                self._elapsed_time = self._state_exit_time - self._state_enter_time
+                Logger.loginfo(f"    '{self._name}' state "
+                            f"was active (enter-to-exit) for {self.elapsed_seconds} seconds.")
+            except Exception as exc:  # pylint: disable=W0703
+                Logger.logerr(f"  entered at time={self.enter_time} seconds but never exited!")

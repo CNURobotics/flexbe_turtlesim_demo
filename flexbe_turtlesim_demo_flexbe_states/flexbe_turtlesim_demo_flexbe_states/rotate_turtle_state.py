@@ -7,6 +7,8 @@ from flexbe_core.proxy import ProxyActionClient
 # example import of required action
 from turtlesim.action import RotateAbsolute
 
+import math
+
 
 class RotateTurtleState(EventState):
     """
@@ -72,6 +74,7 @@ class RotateTurtleState(EventState):
             result = self._client.get_result(self._topic)
             #feedback.feedback.remaining to access feedback
 
+            userdata.duration = self._node.get_clock().now() - self._start_time
             Logger.loginfo('Rotation complete')
             return 'rotation_complete'
 
@@ -84,7 +87,7 @@ class RotateTurtleState(EventState):
         self._start_time = self._node.get_clock().now()
 
         goal = RotateAbsolute.Goal()
-        goal.theta = userdata.angle
+        goal.theta = (userdata.angle * math.pi)/180
 
         # Send the goal.
         self._error = False  # make sure to reset the error state since a previous state execution might have failed

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Example Sub-Behavior">
+
+    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.example_sub_behavior_sm" class="ExampleSubBehaviorSM" />
+    <tagstring>example, container</tagstring>
+    <author>David Conner</author>
+    <date>Wed Jul 05 2023</date>
+    <description>
+        Example behavior that contains a behavior
+    </description>
+
+
+    <!-- Contained Behaviors -->
+    <contains name="Example Concurrent Behavior" />
+
+    <!-- Available Parameters -->
+
+</behavior>

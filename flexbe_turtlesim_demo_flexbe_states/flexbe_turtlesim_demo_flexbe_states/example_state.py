@@ -94,7 +94,7 @@ class ExampleState(EventState):
             # Here we will just return the prior outcome and not recalculate 
 
             # Local info is NOT sent to the UI, and only shown in logs and terminal
-            Logger.localinfo(f"execute blocked for '{self._name}' state @ {self.clock_time} "
+            Logger.localinfo(f"execute blocked for '{self._name}' state ({self.path}) @ {self.clock_time} "
                         f"- use prior return code={self._return}")
             return self._return
         
@@ -102,19 +102,19 @@ class ExampleState(EventState):
         try:
             self._elapsed_time = ExampleState._node.get_clock().now() - self._state_enter_time
             if self._elapsed_time >= self._target_wait_time:
-                Logger.loginfo(f"execute for '{self._name}' state @ {self.clock_time} "
+                Logger.loginfo(f"execute for '{self._name}' state ({self.path}) @ {self.clock_time} "
                                f"- done waiting at {self.elapsed_seconds} seconds.")
                 self._return = 'done'
                 return 'done'  # One of the outcomes declared above.
         except Exception:  # pylint:disable=W0703
             # Something went wrong
-            Logger.logerr(f"execute for '{self._name}' state @ {self.clock_time} "
+            Logger.logerr(f"execute for '{self._name}' state ({self.path}) @ {self.clock_time} "
                            f"- something went wrong after {self.elapsed_seconds} seconds.")
             self._return = 'failed'
             return 'failed'
 
         # Local info is NOT sent to the UI, and only shown in logs and terminal
-        Logger.localinfo(f"execute for '{self._name}' state @ {self.clock_time} "
+        Logger.localinfo(f"execute for '{self._name}' state ({self.path}) @ {self.clock_time} "
                         f"- {self.elapsed_seconds} seconds since start.")
         return None  # This is normal behavior for state to continue executing
 
@@ -132,7 +132,7 @@ class ExampleState(EventState):
         self._elapsed_time = Duration(seconds=0.0)
         self._return = None  # Clear return code on entry
         
-        Logger.loginfo(f"on_enter for '{self._name}' state @ {self.clock_time} "
+        Logger.loginfo(f"on_enter for '{self._name}' state ({self.path}) @ {self.clock_time} "
                            f"- need to wait for {self.target_seconds} seconds.")
 
     def on_exit(self, userdata):
@@ -143,7 +143,7 @@ class ExampleState(EventState):
         Nothing to do in this example.
         """
         self._state_exit_time = ExampleState._node.get_clock().now()
-        Logger.loginfo(f"on_exit for '{self._name}' state @ {self.clock_time} "
+        Logger.loginfo(f"on_exit for '{self._name}' state ({self.path}) @ {self.clock_time} "
                        f"elapsed time = {self.elapsed_seconds} seconds.")
 
     def on_start(self):
@@ -155,7 +155,7 @@ class ExampleState(EventState):
         In this example, we use this event to set the correct start time.
         """
         self._state_start_time = ExampleState._node.get_clock().now()
-        Logger.loginfo(f"on_start for '{self._name}' state @ {self.start_time} seconds "
+        Logger.loginfo(f"on_start for '{self._name}' state ({self.path}) @ {self.start_time} seconds "
                        f" time to wait = {self.target_seconds} seconds..")
 
     def on_stop(self):
@@ -166,10 +166,10 @@ class ExampleState(EventState):
         Nothing to do in this example.
         """
         self._elapsed_time = ExampleState._node.get_clock().now() - self._state_start_time
-        Logger.loginfo(f"on_stop for '{self._name}' state @ {self.clock_time} seconds "
+        Logger.loginfo(f"on_stop for '{self._name}' state ({self.path}) @ {self.clock_time} seconds "
                        f" total behavior instance elapsed time = {self.elapsed_seconds} seconds ")
         if self._state_enter_time is None:
-            Logger.loginfo(f"on_stop for '{self._name}' state @ {self.clock_time} seconds "
+            Logger.loginfo(f"on_stop for '{self._name}' state ({self.path}) @ {self.clock_time} seconds "
                        f" - never entered the state to execute! ")
         else:
             try:

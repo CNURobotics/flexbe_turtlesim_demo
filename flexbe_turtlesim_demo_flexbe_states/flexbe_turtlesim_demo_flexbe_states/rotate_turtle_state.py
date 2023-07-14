@@ -87,6 +87,7 @@ class RotateTurtleState(EventState):
         self._start_time = self._node.get_clock().now()
 
         goal = RotateAbsolute.Goal()
+
         if type(userdata.angle) is float or type(userdata.angle) is int:
             goal.theta = (userdata.angle * math.pi)/180
         else:

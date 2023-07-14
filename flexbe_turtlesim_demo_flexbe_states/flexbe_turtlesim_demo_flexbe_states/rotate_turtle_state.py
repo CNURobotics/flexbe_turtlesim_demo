@@ -9,7 +9,6 @@ from turtlesim.action import RotateAbsolute
 
 import math
 
-
 class RotateTurtleState(EventState):
     """
     Actionlib actions are the most common basis for state implementations.
@@ -73,24 +72,28 @@ class RotateTurtleState(EventState):
         if self._client.has_result(self._topic):
             result = self._client.get_result(self._topic)
             #feedback.feedback.remaining to access feedback
-
             userdata.duration = self._node.get_clock().now() - self._start_time
             Logger.loginfo('Rotation complete')
             return 'rotation_complete'
 
         # If the action has not yet finished, no outcome will be returned and the state stays active.
 
-
     def on_enter(self, userdata):
+
+        # make sure to reset the error state since a previous state execution might have failed
+        self._error = False
         
         # Recording the start time to set rotation duration output
         self._start_time = self._node.get_clock().now()
 
         goal = RotateAbsolute.Goal()
-        goal.theta = (userdata.angle * math.pi)/180
+        if type(userdata.angle) is float or type(userdata.angle) is int:
+            goal.theta = (userdata.angle * math.pi)/180
+        else:
+            self._error = True
+            Logger.logwarn("Input is %s. Expects an int or a float.", type(userdata.angle).__name__)
 
         # Send the goal.
-        self._error = False  # make sure to reset the error state since a previous state execution might have failed
         try:
             self._client.send_goal(self._topic, goal)
         except Exception as e:

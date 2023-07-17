@@ -7,6 +7,7 @@ from flexbe_core.proxy import ProxyActionClient
 # example import of required action
 from turtlesim.action import RotateAbsolute
 
+import math
 
 class RotateTurtleState(EventState):
     """
@@ -28,7 +29,8 @@ class RotateTurtleState(EventState):
     Outputs
     <= rotation_complete   Only a few dishes have been cleaned.
     <= failed              Failed for some reason.
-    <= canceled            User canceled before completion
+    <= canceled            User canceled before completion.
+    <= timeout             The action has timed out.
 
     User data
     ># angle     float     Desired rotational angle in (degrees) (Input)
@@ -38,9 +40,10 @@ class RotateTurtleState(EventState):
 
     def __init__(self, timeout, action_topic="/turtle1/rotate_absolute"):
         # See example_state.py for basic explanations.
-        super().__init__(outcomes=['rotation_complete', 'failed', 'canceled'],
+        super().__init__(outcomes=['rotation_complete', 'failed', 'canceled', 'timeout'],
                                                  input_keys=['angle'],
-                                                 output_keys=['cleaned'])
+                                                 output_keys=['duration']) 
+                                                 
         self._timeout = Duration(seconds=timeout)
         self._topic = action_topic
 
@@ -61,43 +64,44 @@ class RotateTurtleState(EventState):
         # Check if the client failed to send the goal.
         if self._error:
             return 'failed'
+        
+        if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._timeout.nanoseconds:
+            return 'timeout'
 
         # Check if the action has been finished
         if self._client.has_result(self._topic):
             result = self._client.get_result(self._topic)
-            dishes_cleaned = result.total_dishes_cleaned
-
-            # In this example, we also provide the amount of cleaned dishes as output key.
-            userdata.cleaned = dishes_cleaned
-
-            # Based on the result, decide which outcome to trigger.
-            if dishes_cleaned > self._dishes_to_do:
-                return 'cleaned_enough'
-            else:
-                return 'cleaned_some'
+            #feedback.feedback.remaining to access feedback
+            userdata.duration = self._node.get_clock().now() - self._start_time
+            Logger.loginfo('Rotation complete')
+            return 'rotation_complete'
 
         # If the action has not yet finished, no outcome will be returned and the state stays active.
 
     def on_enter(self, userdata):
-        # When entering this state, we send the action goal once to let the robot start its work.
 
-        # As documented above, we get the specification of which dishwasher to use as input key.
-        # This enables a previous state to make this decision during runtime and provide the ID as its own output key.
-        dishwasher_id = userdata.dishwasher
+        # make sure to reset the error state since a previous state execution might have failed
+        self._error = False
+        
+        # Recording the start time to set rotation duration output
+        self._start_time = self._node.get_clock().now()
 
-        # Create the goal.
-        goal = DoDishesGoal()
-        goal.dishwasher_id = dishwasher_id
+        goal = RotateAbsolute.Goal()
+
+        if type(userdata.angle) is float or type(userdata.angle) is int:
+            goal.theta = (userdata.angle * math.pi)/180
+        else:
+            self._error = True
+            Logger.logwarn("Input is %s. Expects an int or a float.", type(userdata.angle).__name__)
 
         # Send the goal.
-        self._error = False  # make sure to reset the error state since a previous state execution might have failed
         try:
             self._client.send_goal(self._topic, goal)
         except Exception as e:
             # Since a state failure not necessarily causes a behavior failure,
             # it is recommended to only print warnings, not errors.
             # Using a linebreak before appending the error log enables the operator to collapse details in the GUI.
-            Logger.logwarn('Failed to send the DoDishes command:\n%s' % str(e))
+            Logger.logwarn('Failed to send the RotateAbsolute command:\n%s' % str(e))
             self._error = True
 
     def on_exit(self, userdata):

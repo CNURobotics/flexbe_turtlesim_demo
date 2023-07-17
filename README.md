@@ -165,6 +165,31 @@ which publishes a fixed command velocity as a [Twist](https://docs.ros2.org/late
 
 ----
 
+## RotateTurtleState and userdata
+
+Certain states may require an Input Key Mapping such as the [Rotate Turtle State](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py).
+Input keys are defined as part of userdata. The values of these keys can be used by the states to change the result or output of them.
+To use the Rotate Turtle State navigate to the behavior dashboard and define a userdata key value under the State Machine Userdata section.
+Navigate to the state in the statemachine editor and map the input angle to the userdata key that was defined.
+Click on the Data Flow Graph button at the top of the screen to see the flow of data through the state machine.
+
+<img src="img/data_flow_graph.png" alt="Data flowing into Rotation State." width="350">
+
+Now when the state is ran the turtle will rotate to the key value that was defined. While this is great, it would be more useful being able to define an angle while a 
+behavior is running.
+
+## InputState
+
+An input key can be supplied to a state while a behavior is running with an Input State. This input state takes user input and maps it to an output key which can be used by other states. In order to utilize the input state an input action server must be run with the following command:
+
+`ros2 run flexbe_input input_action_server`
+
+The action server will prompt a user for input and pass the input to the input state and set the result to an output key. To connect the input state and rotation state map the rotation state input key to the output key of input state.
+
+<img src="img/input_state_demo.png" alt="Using input state to provide data to turtle rotation state." width="350">
+
+----
+
 TODO write ups:
 
  * Discuss FlexBE data flow in context of Turtlesim demo

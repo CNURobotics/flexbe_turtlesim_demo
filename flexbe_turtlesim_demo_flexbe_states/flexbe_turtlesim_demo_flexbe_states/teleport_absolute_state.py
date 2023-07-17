@@ -103,7 +103,6 @@ class TeleportAbsoluteState(EventState):
             # We will do this in a non-blocking way
             if self._srv.done(self._srv_topic):
                 result = self._srv.result(self._srv_topic)
-                Logger.localinfo(f"{self._name}: Service {self._srv_topic} returned {result}!")
                 self._return = 'done'
             else:
 

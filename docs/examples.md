@@ -1,7 +1,7 @@
 # FlexBE Introductory Examples
 
 In addition to the basic TurtleSim quickstart demo, this
-repo includes several examples behaviors to illustrate key
+repo includes several example behaviors to illustrate key
 FlexBE capabilities.
 
 You are free to jump into any example, but they are designed to

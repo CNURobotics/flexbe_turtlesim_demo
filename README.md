@@ -180,7 +180,7 @@ behavior is running.
 
 ## InputState
 
-An input key can be supplied to a state while a behavior is running with an [Input State](flexbe_behavior_engine/flexbe_states/flexbe_states/input_state.py). This input state takes user input and maps it to an output key which can be used by other states. In order to utilize the an input action server must be run with the following command:
+An input key can be supplied to a state while a behavior is running with an Input State. This input state takes user input and maps it to an output key which can be used by other states. In order to utilize the an input action server must be run with the following command:
 
 `ros2 run flexbe_input input_action_server`
 

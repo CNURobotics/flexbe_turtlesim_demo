@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Example Rotation State Behavior">
+
+    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.example_rotation_state_behavior_sm" class="ExampleRotationStateBehaviorSM" />
+    <tagstring>Turtlesim</tagstring>
+    <author>Collin Stone</author>
+    <date>Mon Jul 17 2023</date>
+    <description>
+        A simple behavior demoing the rotation state.
+        
+    </description>
+
+
+    <!-- Contained Behaviors -->
+
+    <!-- Available Parameters -->
+
+</behavior>

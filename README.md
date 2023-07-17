@@ -175,7 +175,7 @@ TODO write ups:
 
 ----
 
-For a more in-depth discussion of FlexBE capabilities continue to the [Examples](doc/examples.md)
+For a more in-depth discussion of FlexBE capabilities continue to the [Examples](docs/examples.md)
 
 See the main [FlexBE documentation] for more  information about loading and launch behaviors.
 

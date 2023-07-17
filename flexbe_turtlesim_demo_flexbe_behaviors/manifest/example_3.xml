@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<behavior name="Example Concurrent Behavior">
+<behavior name="Example 3">
 
-    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.example_concurrent_behavior_sm" class="ExampleConcurrentBehaviorSM" />
+    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.example_3_sm" class="Example3SM" />
     <tagstring>demo</tagstring>
     <author>David Conner</author>
     <date>Thursday 30-June-2023</date>
     <description>
-        This is a simple example for a behavior using custom example_state that logs each function in life cycle.
+        This is a simple example for a behavior with a ConcurrencyContainer.
+        
+        The behavior makes use of the custom ExampleState that logs each function in life cycle.
         
         Here we demonstrate concurrent behaviors with both OR and AND style exit conditions.
         

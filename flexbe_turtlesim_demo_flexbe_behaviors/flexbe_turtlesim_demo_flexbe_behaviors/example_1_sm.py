@@ -22,12 +22,12 @@ from flexbe_states.wait_state import WaitState
 # [/MANUAL_IMPORT]
 
 
-class ExampleBehaviorSM(Behavior):
+class Example1SM(Behavior):
     """This is a simple example for a behavior."""
 
     def __init__(self, node):
-        super(ExampleBehaviorSM, self).__init__()
-        self.name = 'Example Behavior'
+        super().__init__()
+        self.name = 'Example 1'
         self.node = node
 
         # parameters of this behavior

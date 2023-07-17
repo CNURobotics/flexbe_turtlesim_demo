@@ -8,7 +8,9 @@
 ###########################################################
 
 """
-Define Example Sub-Behavior.
+Example behavior that contains a (sub-)behavior.
+
+This behavior contains the Example 3 behavior as a state.
 
 Created on Wed Jul 05 2023
 @author: David Conner
@@ -22,7 +24,7 @@ from flexbe_core import Logger
 from flexbe_core import OperatableStateMachine
 from flexbe_core import PriorityContainer
 from flexbe_states.log_state import LogState
-from flexbe_turtlesim_demo_flexbe_behaviors.example_concurrent_behavior_sm import ExampleConcurrentBehaviorSM
+from flexbe_turtlesim_demo_flexbe_behaviors.example_3_sm import Example3SM
 
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -30,16 +32,16 @@ from flexbe_turtlesim_demo_flexbe_behaviors.example_concurrent_behavior_sm impor
 # [/MANUAL_IMPORT]
 
 
-class ExampleSubBehaviorSM(Behavior):
+class Example4SM(Behavior):
     """
-    Define Example Sub-Behavior.
+    Example behavior that contains a (sub-)behavior.
 
-    Example behavior that contains a behavior
+    This behavior contains the Example 3 behavior as a state.
     """
 
     def __init__(self, node):
         super().__init__()
-        self.name = 'Example Sub-Behavior'
+        self.name = 'Example 4'
 
         # parameters of this behavior
 
@@ -49,7 +51,7 @@ class ExampleSubBehaviorSM(Behavior):
         PriorityContainer.initialize_ros(node)
         Logger.initialize(node)
         LogState.initialize_ros(node)
-        self.add_behavior(ExampleConcurrentBehaviorSM, 'Example Concurrent Behavior', node)
+        self.add_behavior(Example3SM, 'Example 3', node)
 
         # Additional initialization code can be added inside the following tags
         # [MANUAL_INIT]
@@ -87,7 +89,7 @@ class ExampleSubBehaviorSM(Behavior):
 
             # x:208 y:179
             OperatableStateMachine.add('Example Concurrent Behavior',
-                                        self.use_behavior(ExampleConcurrentBehaviorSM, 'Example Concurrent Behavior'),
+                                        self.use_behavior(Example3SM, 'Example 3'),
                                         transitions={'finished': 'B', 'failed': 'C'},
                                         autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
 

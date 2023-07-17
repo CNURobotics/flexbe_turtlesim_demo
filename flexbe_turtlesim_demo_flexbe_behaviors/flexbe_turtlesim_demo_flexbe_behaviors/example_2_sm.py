@@ -8,7 +8,7 @@
 ###########################################################
 
 """
-Define Example State Behavior.
+Define Example 2 Behavior.
 
 Created on Thursday 30-June-2023
 @author: David Conner
@@ -30,19 +30,18 @@ from flexbe_turtlesim_demo_flexbe_states.example_state import ExampleState as fl
 # [/MANUAL_IMPORT]
 
 
-class ExampleStateBehaviorSM(Behavior):
+class Example2SM(Behavior):
     """
     Define Example State Behavior.
 
-    This is a simple example for a behavior using custom example_state that logs each function in life cycle.
+    This is a simple example for a behavior using custom ExampleState that logs each function in life cycle.
     """
 
     def __init__(self, node):
         super().__init__()
-        self.name = 'Example State Behavior'
+        self.name = 'Example 2'
 
         # parameters of this behavior
-        self.add_parameter('waiting_time', 3)
 
         # references to used behaviors
         OperatableStateMachine.initialize_ros(node)

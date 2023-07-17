@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<behavior name="Example State Behavior">
+<behavior name="Example 1">
 
-    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.example_state_behavior_sm" class="ExampleStateBehaviorSM" />
+    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.example_1_sm" class="Example1SM" />
     <tagstring>demo</tagstring>
-    <author>David Conner</author>
-    <date>Thursday 30-June-2023</date>
+    <author>Philipp Schillinger</author>
+    <date>Fri Aug 21 2015</date>
     <description>
-        This is a simple example for a behavior using custom example_state that logs each function in life cycle.
+        This is a simple example for a behavior.
     </description>
 
 

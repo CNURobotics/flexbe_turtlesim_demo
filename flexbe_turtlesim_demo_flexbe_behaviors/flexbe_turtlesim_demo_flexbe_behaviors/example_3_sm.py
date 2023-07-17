@@ -8,7 +8,14 @@
 ###########################################################
 
 """
-Define Example Concurrent Behavior.
+
+Define behavior with Concurrency Container.
+
+This is a simple example for a behavior with a ConcurrencyContainer.
+
+The behavior makes use of the custom ExampleState that logs each function in life cycle.
+
+Here we demonstrate concurrent behaviors with both OR and AND style exit conditions.
 
 Created on Thursday 30-June-2023
 @author: David Conner
@@ -23,7 +30,7 @@ from flexbe_core import OperatableStateMachine
 from flexbe_core import PriorityContainer
 from flexbe_states.log_state import LogState
 from flexbe_states.wait_state import WaitState
-from flexbe_turtlesim_demo_flexbe_states.example_state import ExampleState
+from flexbe_turtlesim_demo_flexbe_states.example_state import ExampleState as flexbe_turtlesim_demo_flexbe_states__ExampleState
 
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -31,7 +38,7 @@ from flexbe_turtlesim_demo_flexbe_states.example_state import ExampleState
 # [/MANUAL_IMPORT]
 
 
-class ExampleConcurrentBehaviorSM(Behavior):
+class Example3SM(Behavior):
     """
     Define Example Concurrent Behavior.
 
@@ -56,7 +63,7 @@ class ExampleConcurrentBehaviorSM(Behavior):
         ConcurrencyContainer.initialize_ros(node)
         PriorityContainer.initialize_ros(node)
         Logger.initialize(node)
-        ExampleState.initialize_ros(node)
+        flexbe_turtlesim_demo_flexbe_states__ExampleState.initialize_ros(node)
         LogState.initialize_ros(node)
         WaitState.initialize_ros(node)
 
@@ -96,13 +103,13 @@ class ExampleConcurrentBehaviorSM(Behavior):
         with _sm_container_and_0:
             # x:108 y:72
             OperatableStateMachine.add('C',
-                                        ExampleState(target_time=self.waiting_time_c),
+                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_c),
                                         transitions={'done': 'finished', 'failed': 'failed'},
                                         autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
             # x:110 y:173
             OperatableStateMachine.add('D',
-                                        ExampleState(target_time=self.waiting_time_d),
+                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_d),
                                         transitions={'done': 'finished', 'failed': 'failed'},
                                         autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
@@ -118,13 +125,13 @@ class ExampleConcurrentBehaviorSM(Behavior):
         with _sm_concurrent_or_1:
             # x:30 y:40
             OperatableStateMachine.add('A',
-                                        ExampleState(target_time=self.waiting_time_a),
+                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_a),
                                         transitions={'done': 'finished', 'failed': 'failed'},
                                         autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
             # x:30 y:168
             OperatableStateMachine.add('B',
-                                        ExampleState(target_time=self.waiting_time_b),
+                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_b),
                                         transitions={'done': 'finished', 'failed': 'failed'},
                                         autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 

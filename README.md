@@ -151,7 +151,7 @@ repeat the "Eight" transition.
 
 <img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="500">
 
-This is based on the settings in the *Operator Decision State.  By allowing a transition to "Eight" with only "High" autonomy,
+This is based on the settings in the *Operator Decision State*.  By allowing a transition to "Eight" with only "High" autonomy,
 setting the executive to "Full" autonomy allows the automatic transition.
 
 <img src="img/decision_state_settings.png" alt="Settings for operator decision state." width="350">
@@ -175,7 +175,8 @@ Click on the Data Flow Graph button at the top of the screen to see the flow of 
 
 <img src="img/data_flow_graph.png" alt="Data flowing into Rotation State." width="350">
 
-Now when the state is ran the turtle will rotate to the key value that was defined. While this is great, it would be more useful being able to define an angle while a 
+Now when the state is executed the turtle will rotate to the key value that was defined. 
+While this is great, it would be more useful being able to define an angle while a 
 behavior is running.
 
 ## InputState

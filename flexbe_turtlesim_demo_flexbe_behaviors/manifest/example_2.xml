@@ -14,5 +14,13 @@
     <!-- Contained Behaviors -->
 
     <!-- Available Parameters -->
+    <params>
+
+        <param type="numeric" name="waiting_time" default="3" label="Waiting Time" hint="Sets the time to wait after logging.">
+            <min value="1" />
+            <max value="5" />
+        </param>
+
+    </params>
 
 </behavior>

@@ -42,6 +42,7 @@ class Example2SM(Behavior):
         self.name = 'Example 2'
 
         # parameters of this behavior
+        self.add_parameter('waiting_time', 3)
 
         # references to used behaviors
         OperatableStateMachine.initialize_ros(node)

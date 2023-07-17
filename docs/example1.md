@@ -101,7 +101,7 @@ For the `LogState` the execute function immediately returns `done` as there is n
 
 Our second state is the `WaitState`(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/wait_state.py) state implementation show below.
 
-```Python
+```python
 from flexbe_core import EventState
 
 
@@ -146,18 +146,18 @@ we block any transitions that required anything higher than "Off".
 > This will require an integer value as input.  To allow for floating point values, specify with a decimal point (e.g., `3.`).
 
 The center image shows the initial `Print_Message` state with the output  blocked due to the required autonomy level.  
-The system requests the operator to click on "Done" transition in the oval label to enable the transition to next state.
+The system requests the operator to click on "done" transition in the oval label to enable the transition to next state.
 The "Behavior Feedback" pane shows output logged from the onboard behavior, including the "Hello World!" message originally 
 defined on the configuration screen.  This message is also logged on the onboard terminal window where the onboard node was started.
-After clicking on the "Done" transition, the current active state transitions to the `Wait_After_Logging" state as shown in the rightmost
-image below.  As this is during the wait period the output transition is shown in gray, whereas the center image shows the transition that is active highlighted in yellow.  The operator can wait for the state to finish, or can choose to preempt the state and force the "Done" transition by clicking on the label oval prior to the wait time completing.  Because this state has "Off" autonomy level, the behavior will autonomously complete and return outcome "finished" as it returns to the "Start" pane shown in the leftmost image.
+After clicking on the "done" transition, the current active state transitions to the `Wait_After_Logging" state as shown in the rightmost
+image below.  As this is during the wait period the output transition is shown in gray, whereas the center image shows the transition that is active highlighted in yellow.  The operator can wait for the state to finish, or can choose to preempt the state and force the "done" transition by clicking on the label oval prior to the wait time completing.  Because this state has "Off" autonomy level, the behavior will autonomously complete and return outcome "finished" as it returns to the "Start" pane shown in the leftmost image.
 
 
 <img src="../img/example1_start_low.png" alt="Example 1 start screen." width="250">
 <img src="../img/example1_low_block.png" alt="Example 1 log messages." width="250">
 <img src="../img/example1_wait.png" alt="Example 1 waiting." width="250">
 
-For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "Done" after the log state.
+For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "done" after the log state.
 
 After this, continue on to [Example 2](docs/example2.md) for a more indepth discussion of the state implementations.
 

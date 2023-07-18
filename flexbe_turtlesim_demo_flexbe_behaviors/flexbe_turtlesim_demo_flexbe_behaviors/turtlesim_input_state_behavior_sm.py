@@ -87,7 +87,7 @@ class TurtlesimInputStateBehaviorSM(Behavior):
         with _state_machine:
             # x:202 y:136
             OperatableStateMachine.add('InputState',
-                                       InputState(message="Enter an angle (degrees): "),
+                                       InputState(request=1, message="Enter an angle (degrees): "),
                                        transitions={'received': 'RotateTurtleState', 'aborted': 'Aborted',
                                                     'no_connection': 'No Connection', 'data_error': 'Data Error'},
                                        autonomy={'received': Autonomy.Low, 'aborted': Autonomy.Off,

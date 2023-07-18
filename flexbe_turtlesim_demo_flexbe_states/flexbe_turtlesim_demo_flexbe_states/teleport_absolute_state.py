@@ -81,7 +81,7 @@ class TeleportAbsoluteState(EventState):
             # Waiting for result.
             # We will do this in a non-blocking way
             if self._srv.done(self._srv_topic):
-                result = self._srv.result(self._srv_topic)
+                _ = self._srv.result(self._srv_topic)  # grab empty result, but nothing to check here
                 self._return = 'done'
             else:
 

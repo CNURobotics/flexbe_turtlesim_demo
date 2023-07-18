@@ -87,12 +87,11 @@ class RotateTurtleState(EventState):
 
         # Check if the action has been finished
         if self._client.has_result(self._topic):
-            result = self._client.get_result(self._topic)
-            # feedback.feedback.remaining to access feedback
+            _ = self._client.get_result(self._topic)  # The delta result value is not useful here
             userdata.duration = self._node.get_clock().now() - self._start_time
             Logger.loginfo('Rotation complete')
             self._return = 'rotation_complete'
-            return 'rotation_complete'
+            return self._return
 
         if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._timeout.nanoseconds:
             # Checking for timeout after we check for goal response

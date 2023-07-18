@@ -43,9 +43,8 @@ class Example3SM(Behavior):
     Define Example Concurrent Behavior.
 
     This is a simple example for a behavior using custom example_state that logs each function in life cycle.
-    
+
     Here we demonstrate concurrent behaviors with both OR and AND style exit conditions.
-    
     """
 
     def __init__(self, node):
@@ -73,15 +72,16 @@ class Example3SM(Behavior):
         # [/MANUAL_INIT]
 
         # Behavior comments:
-        # ! 909 135 
+        # ! 909 135
         # Behavior execution stops here!
 
         # ! 478 119 /Container_AND
-        # Both C and D must return outcome Done to exit this concurrency container.|n|nIf one finishes, it will stop execution and exit its state, but the other state will continue to execute until either done or failed
+        # Both C and D must return outcome Done to exit this concurrency container.
+        # If one finishes, it will stop execution and exit its state, but the other state
+        # will continue to execute until either done or failed
 
         # ! 524 140 /Concurrent_OR
         # Either A or B returning outcome will exit this concurrent container since we are using single connections!
-
 
     def create(self):
         start_msg = "Demo started!"
@@ -94,90 +94,88 @@ class Example3SM(Behavior):
 
         # [/MANUAL_CREATE]
         # x:500 y:78, x:482 y:226, x:230 y:365, x:475 y:287, x:430 y:365
-        _sm_container_and_0 = ConcurrencyContainer(outcomes=['finished', 'failed'], conditions=[
-                                        ('finished', [('C', 'done'), ('D', 'done')]),
-                                        ('failed', [('C', 'failed')]),
-                                        ('failed', [('D', 'failed')])
-                                        ])
+        _sm_container_and_0 = ConcurrencyContainer(outcomes=['finished', 'failed'],
+                                                   conditions=[('finished', [('C', 'done'), ('D', 'done')]),
+                                                               ('failed', [('C', 'failed')]),
+                                                               ('failed', [('D', 'failed')])
+                                                               ])
 
         with _sm_container_and_0:
             # x:108 y:72
             OperatableStateMachine.add('C',
-                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_c),
-                                        transitions={'done': 'finished', 'failed': 'failed'},
-                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
+                                       flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_c),
+                                       transitions={'done': 'finished', 'failed': 'failed'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
             # x:110 y:173
             OperatableStateMachine.add('D',
-                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_d),
-                                        transitions={'done': 'finished', 'failed': 'failed'},
-                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
-
+                                       flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_d),
+                                       transitions={'done': 'finished', 'failed': 'failed'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
         # x:478 y:55, x:469 y:111, x:455 y:259, x:462 y:183, x:448 y:317, x:444 y:365
-        _sm_concurrent_or_1 = ConcurrencyContainer(outcomes=['finished', 'failed'], conditions=[
-                                        ('finished', [('A', 'done')]),
-                                        ('finished', [('B', 'done')]),
-                                        ('failed', [('A', 'failed')]),
-                                        ('failed', [('B', 'failed')])
-                                        ])
+        _sm_concurrent_or_1 = ConcurrencyContainer(outcomes=['finished', 'failed'],
+                                                   conditions=[('finished', [('A', 'done')]),
+                                                               ('finished', [('B', 'done')]),
+                                                               ('failed', [('A', 'failed')]),
+                                                               ('failed', [('B', 'failed')])
+                                                               ])
 
         with _sm_concurrent_or_1:
             # x:30 y:40
             OperatableStateMachine.add('A',
-                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_a),
-                                        transitions={'done': 'finished', 'failed': 'failed'},
-                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
+                                       flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_a),
+                                       transitions={'done': 'finished', 'failed': 'failed'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
             # x:30 y:168
             OperatableStateMachine.add('B',
-                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_b),
-                                        transitions={'done': 'finished', 'failed': 'failed'},
-                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
-
+                                       flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time_b),
+                                       transitions={'done': 'finished', 'failed': 'failed'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
         with _state_machine:
             # x:52 y:78
             OperatableStateMachine.add('Start',
-                                        LogState(text=start_msg, severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'Concurrent_OR'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text=start_msg, severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'Concurrent_OR'},
+                                       autonomy={'done': Autonomy.Low})
 
             # x:565 y:166
             OperatableStateMachine.add('Container_AND',
-                                        _sm_container_and_0,
-                                        transitions={'finished': 'Done', 'failed': 'Failed'},
-                                        autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
+                                       _sm_container_and_0,
+                                       transitions={'finished': 'Done', 'failed': 'Failed'},
+                                       autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
 
             # x:273 y:106
             OperatableStateMachine.add('Delay',
-                                        WaitState(wait_time=1.0),
-                                        transitions={'done': 'EnterAnd'},
-                                        autonomy={'done': Autonomy.Off})
+                                       WaitState(wait_time=1.0),
+                                       transitions={'done': 'EnterAnd'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:740 y:72
             OperatableStateMachine.add('Done',
-                                        LogState(text=done_msg, severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'finished'},
-                                        autonomy={'done': Autonomy.High})
+                                       LogState(text=done_msg, severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'finished'},
+                                       autonomy={'done': Autonomy.High})
 
             # x:424 y:107
             OperatableStateMachine.add('EnterAnd',
-                                        LogState(text="Enter the AND Concurrent state ...", severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'Container_AND'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="Enter the AND Concurrent state ...", severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'Container_AND'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:750 y:301
             OperatableStateMachine.add('Failed',
-                                        LogState(text="Failure encountered", severity=Logger.REPORT_ERROR),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.High})
+                                       LogState(text="Failure encountered", severity=Logger.REPORT_ERROR),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.High})
 
             # x:128 y:201
             OperatableStateMachine.add('Concurrent_OR',
-                                        _sm_concurrent_or_1,
-                                        transitions={'finished': 'Delay', 'failed': 'Failed'},
-                                        autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
+                                       _sm_concurrent_or_1,
+                                       transitions={'finished': 'Delay', 'failed': 'Failed'},
+                                       autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
 
         return _state_machine
 

@@ -35,7 +35,7 @@ class TurtlesimRotationStateBehaviorSM(Behavior):
     Define Turtlesim Rotation State Behavior.
 
     A simple behavior demonstrating the Turtlesim RotateAbsolute action interface.
-    
+
     The example includes userdata defined in the statemachine configuration.
     """
 
@@ -55,8 +55,8 @@ class TurtlesimRotationStateBehaviorSM(Behavior):
 
         # Additional initialization code can be added inside the following tags
         # [MANUAL_INIT]
-		
-		# [/MANUAL_INIT]
+
+        # [/MANUAL_INIT]
 
         # Behavior comments:
 
@@ -67,43 +67,45 @@ class TurtlesimRotationStateBehaviorSM(Behavior):
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
-		
-		# [/MANUAL_CREATE]
+
+        # [/MANUAL_CREATE]
         with _state_machine:
             # x:244 y:294
             OperatableStateMachine.add('Rotate Turtle State',
-                                        RotateTurtleState(timeout=10, action_topic="/turtle1/rotate_absolute"),
-                                        transitions={'rotation_complete': 'Log Success', 'failed': 'Log Failed', 'canceled': 'Log Canceled', 'timeout': 'Log Timeout'},
-                                        autonomy={'rotation_complete': Autonomy.Off, 'failed': Autonomy.Off, 'canceled': Autonomy.Off, 'timeout': Autonomy.Off},
-                                        remapping={'angle': 'angle', 'duration': 'duration'})
+                                       RotateTurtleState(timeout=10, action_topic="/turtle1/rotate_absolute"),
+                                       transitions={'rotation_complete': 'Log Success', 'failed': 'Log Failed',
+                                                    'canceled': 'Log Canceled', 'timeout': 'Log Timeout'},
+                                       autonomy={'rotation_complete': Autonomy.Off, 'failed': Autonomy.Off,
+                                                 'canceled': Autonomy.Off, 'timeout': Autonomy.Off},
+                                       remapping={'angle': 'angle', 'duration': 'duration'})
 
             # x:659 y:190
             OperatableStateMachine.add('Log Failed',
-                                        LogState(text="Failed", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="Failed", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:658 y:57
             OperatableStateMachine.add('Log Success',
-                                        LogState(text="Success", severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'finished'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="Success", severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'finished'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:657 y:480
             OperatableStateMachine.add('Log Timeout',
-                                        LogState(text="Timeout", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="Timeout", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:656 y:337
             OperatableStateMachine.add('Log Canceled',
-                                        LogState(text="Canceled", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="Canceled", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Off})
 
         return _state_machine
 
     # Private functions can be added inside the following tags
     # [MANUAL_FUNC]
-	
-	# [/MANUAL_FUNC]
+
+    # [/MANUAL_FUNC]

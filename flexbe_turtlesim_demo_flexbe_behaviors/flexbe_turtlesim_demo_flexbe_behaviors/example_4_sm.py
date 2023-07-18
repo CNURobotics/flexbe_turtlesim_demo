@@ -55,7 +55,7 @@ class Example4SM(Behavior):
 
         # Additional initialization code can be added inside the following tags
         # [MANUAL_INIT]
-        
+
         # [/MANUAL_INIT]
 
         # Behavior comments:
@@ -66,36 +66,36 @@ class Example4SM(Behavior):
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
-        
+
         # [/MANUAL_CREATE]
         with _state_machine:
             # x:61 y:124
             OperatableStateMachine.add('A',
-                                        LogState(text="Enter top-level", severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'Example Concurrent Behavior'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="Enter top-level", severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'Example Concurrent Behavior'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:529 y:153
             OperatableStateMachine.add('B',
-                                        LogState(text="top-level finished", severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'finished'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="top-level finished", severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'finished'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:519 y:267
             OperatableStateMachine.add('C',
-                                        LogState(text="top-level failed", severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="top-level failed", severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:208 y:179
             OperatableStateMachine.add('Example Concurrent Behavior',
-                                        self.use_behavior(Example3SM, 'Example 3'),
-                                        transitions={'finished': 'B', 'failed': 'C'},
-                                        autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
+                                       self.use_behavior(Example3SM, 'Example 3'),
+                                       transitions={'finished': 'B', 'failed': 'C'},
+                                       autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
 
         return _state_machine
 
     # Private functions can be added inside the following tags
     # [MANUAL_FUNC]
-    
+
     # [/MANUAL_FUNC]

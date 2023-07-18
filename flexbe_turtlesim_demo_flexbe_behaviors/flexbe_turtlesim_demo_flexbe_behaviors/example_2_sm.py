@@ -72,21 +72,21 @@ class Example2SM(Behavior):
         with _state_machine:
             # x:52 y:78
             OperatableStateMachine.add('Start',
-                                        LogState(text=start_msg, severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'A'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text=start_msg, severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'A'},
+                                       autonomy={'done': Autonomy.Low})
 
             # x:562 y:190
             OperatableStateMachine.add('Done',
-                                        LogState(text=done_msg, severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'finished'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text=done_msg, severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'finished'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:224 y:81
             OperatableStateMachine.add('A',
-                                        flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time),
-                                        transitions={'done': 'Done', 'failed': 'failed'},
-                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
+                                       flexbe_turtlesim_demo_flexbe_states__ExampleState(target_time=self.waiting_time),
+                                       transitions={'done': 'Done', 'failed': 'failed'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
         return _state_machine
 

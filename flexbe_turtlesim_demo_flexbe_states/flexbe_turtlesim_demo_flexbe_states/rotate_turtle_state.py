@@ -9,6 +9,7 @@ from turtlesim.action import RotateAbsolute
 
 import math
 
+
 class RotateTurtleState(EventState):
     """
     Actionlib actions are the most common basis for state implementations.
@@ -41,9 +42,9 @@ class RotateTurtleState(EventState):
     def __init__(self, timeout, action_topic="/turtle1/rotate_absolute"):
         # See example_state.py for basic explanations.
         super().__init__(outcomes=['rotation_complete', 'failed', 'canceled', 'timeout'],
-                                                 input_keys=['angle'],
-                                                 output_keys=['duration']) 
-                                                 
+                         input_keys=['angle'],
+                         output_keys=['duration'])
+
         self._timeout = Duration(seconds=timeout)
         self._topic = action_topic
 
@@ -64,32 +65,41 @@ class RotateTurtleState(EventState):
         # Check if the client failed to send the goal.
         if self._error:
             return 'failed'
-        
-        if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._timeout.nanoseconds:
-            return 'timeout'
+
+        if self._return is not None:
+            # Return prior outcome in case transition is blocked by autonomy level
+            return self._return
 
         # Check if the action has been finished
         if self._client.has_result(self._topic):
             result = self._client.get_result(self._topic)
-            #feedback.feedback.remaining to access feedback
+            # feedback.feedback.remaining to access feedback
             userdata.duration = self._node.get_clock().now() - self._start_time
             Logger.loginfo('Rotation complete')
+            self._return = 'rotation_complete'
             return 'rotation_complete'
 
+        if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._timeout.nanoseconds:
+            # Checking for timeout after we check for goal response
+            self._return = 'timeout'
+            return 'timeout'
+
         # If the action has not yet finished, no outcome will be returned and the state stays active.
+        return None
 
     def on_enter(self, userdata):
 
         # make sure to reset the error state since a previous state execution might have failed
         self._error = False
-        
+        self._return = None
+
         # Recording the start time to set rotation duration output
         self._start_time = self._node.get_clock().now()
 
         goal = RotateAbsolute.Goal()
 
-        if type(userdata.angle) is float or type(userdata.angle) is int:
-            goal.theta = (userdata.angle * math.pi)/180
+        if isinstance(userdata.angle, (float, int)):
+            goal.theta = (userdata.angle * math.pi) / 180
         else:
             self._error = True
             Logger.logwarn("Input is %s. Expects an int or a float.", type(userdata.angle).__name__)

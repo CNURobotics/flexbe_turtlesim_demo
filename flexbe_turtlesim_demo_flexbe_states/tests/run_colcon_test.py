@@ -56,7 +56,7 @@ class TestFlexBETurtleSimDemoStates(PyTester):
     def test_teleport_absolute_state(self):
         """
         Run FlexBE unit test given .test file.
-        
+
         This test requires longer wait than normal
         """
         self.run_test("teleport_absolute_state", timeout_sec=2.0, max_cnt=5000)

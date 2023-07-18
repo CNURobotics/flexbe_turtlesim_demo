@@ -35,9 +35,8 @@ class TurtlesimInputStateBehaviorSM(Behavior):
     """
     Define Turtlesim Input State Behavior.
 
-    A simple behavior demonstrating the Turtlesim RotateAbsolute action interface, and the FlexBE input state with a simple generic user interface.
-    
-    
+    A simple behavior demonstrating the Turtlesim RotateAbsolute action interface,
+    and the FlexBE input state with a simple generic user interface.
     """
 
     def __init__(self, node):
@@ -57,8 +56,8 @@ class TurtlesimInputStateBehaviorSM(Behavior):
 
         # Additional initialization code can be added inside the following tags
         # [MANUAL_INIT]
-		
-		# [/MANUAL_INIT]
+
+        # [/MANUAL_INIT]
 
         # Behavior comments:
 
@@ -68,68 +67,72 @@ class TurtlesimInputStateBehaviorSM(Behavior):
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
-		
-		# [/MANUAL_CREATE]
+
+        # [/MANUAL_CREATE]
         with _state_machine:
             # x:202 y:136
             OperatableStateMachine.add('InputState',
-                                        InputState(message="Enter an angle (degrees): "),
-                                        transitions={'received': 'RotateTurtleState', 'aborted': 'Aborted', 'no_connection': 'No Connection', 'data_error': 'Data Error'},
-                                        autonomy={'received': Autonomy.Low, 'aborted': Autonomy.Off, 'no_connection': Autonomy.Off, 'data_error': Autonomy.Off},
-                                        remapping={'data': 'angle_degrees'})
+                                       InputState(message="Enter an angle (degrees): "),
+                                       transitions={'received': 'RotateTurtleState', 'aborted': 'Aborted',
+                                                    'no_connection': 'No Connection', 'data_error': 'Data Error'},
+                                       autonomy={'received': Autonomy.Low, 'aborted': Autonomy.Off,
+                                                 'no_connection': Autonomy.Off, 'data_error': Autonomy.Off},
+                                       remapping={'data': 'angle_degrees'})
 
             # x:760 y:531
             OperatableStateMachine.add('Canceled',
-                                        LogState(text="Canceled", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text="Canceled", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Low})
 
             # x:452 y:243
             OperatableStateMachine.add('Data Error',
-                                        LogState(text="Data Error", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text="Data Error", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Low})
 
             # x:761 y:434
             OperatableStateMachine.add('Failed',
-                                        LogState(text="Failed", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text="Failed", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Low})
 
             # x:453 y:137
             OperatableStateMachine.add('No Connection',
-                                        LogState(text="No Connection", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text="No Connection", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Low})
 
             # x:453 y:336
             OperatableStateMachine.add('RotateTurtleState',
-                                        RotateTurtleState(timeout=10, action_topic="/turtle1/rotate_absolute"),
-                                        transitions={'rotation_complete': 'Rotation Complete', 'failed': 'Failed', 'canceled': 'Canceled', 'timeout': 'Timeout'},
-                                        autonomy={'rotation_complete': Autonomy.Off, 'failed': Autonomy.Off, 'canceled': Autonomy.Off, 'timeout': Autonomy.Off},
-                                        remapping={'angle': 'angle_degrees', 'duration': 'duration'})
+                                       RotateTurtleState(timeout=10, action_topic="/turtle1/rotate_absolute"),
+                                       transitions={'rotation_complete': 'Rotation Complete', 'failed': 'Failed',
+                                                    'canceled': 'Canceled', 'timeout': 'Timeout'},
+                                       autonomy={'rotation_complete': Autonomy.Off, 'failed': Autonomy.Off,
+                                                 'canceled': Autonomy.Off, 'timeout': Autonomy.Off},
+                                       remapping={'angle': 'angle_degrees', 'duration': 'duration'})
 
             # x:760 y:335
             OperatableStateMachine.add('Rotation Complete',
-                                        LogState(text="Rotation Successful", severity=Logger.REPORT_HINT),
-                                        transitions={'done': 'finished'},
-                                        autonomy={'done': Autonomy.Off})
+                                       LogState(text="Rotation Successful", severity=Logger.REPORT_HINT),
+                                       transitions={'done': 'finished'},
+                                       autonomy={'done': Autonomy.Off})
 
             # x:758 y:627
             OperatableStateMachine.add('Timeout',
-                                        LogState(text="Timeout", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text="Timeout", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Low})
 
             # x:457 y:10
             OperatableStateMachine.add('Aborted',
-                                        LogState(text="Aborted", severity=Logger.REPORT_WARN),
-                                        transitions={'done': 'failed'},
-                                        autonomy={'done': Autonomy.Low})
+                                       LogState(text="Aborted", severity=Logger.REPORT_WARN),
+                                       transitions={'done': 'failed'},
+                                       autonomy={'done': Autonomy.Low})
 
         return _state_machine
 
     # Private functions can be added inside the following tags
     # [MANUAL_FUNC]
-	
-	# [/MANUAL_FUNC]
+
+    # [/MANUAL_FUNC]

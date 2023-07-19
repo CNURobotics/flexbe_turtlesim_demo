@@ -37,7 +37,7 @@ class RotateTurtleState(EventState):
 
     The ROS 2 action library provides a non-blocking, high-level interface for robot capabilities.
 
-    Elements define here for UI
+    Elements defined here for UI
     Parameters
     -- timeout             Maximum time allowed (seconds)
     -- action_topic        Name of action to invoke
@@ -113,7 +113,7 @@ class RotateTurtleState(EventState):
         goal = RotateAbsolute.Goal()
 
         if isinstance(userdata.angle, (float, int)):
-            goal.theta = (userdata.angle * math.pi) / 180
+            goal.theta = (userdata.angle * math.pi) / 180  # convert to radians
         else:
             self._error = True
             Logger.logwarn("Input is %s. Expects an int or a float.", type(userdata.angle).__name__)

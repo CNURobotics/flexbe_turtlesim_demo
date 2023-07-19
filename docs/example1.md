@@ -87,7 +87,7 @@ about the state, and is used by the UI to display information about the data han
 
 Although, not shown in this example, other UI specifications include:
 * `>#` - data passed as input `userdata` from upstream states
-* `<#` - data passed as output `userdata` to downstream states
+* `#>` - data passed as output `userdata` to downstream states
 
 > Note: Userdata can also be defined at the state machine level.
 

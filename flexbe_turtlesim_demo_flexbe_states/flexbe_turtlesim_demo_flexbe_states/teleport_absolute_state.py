@@ -25,22 +25,31 @@ class TeleportAbsoluteState(EventState):
     """
     This state teleports the Turtlesim turtle using TeleportAbsolute service.
 
+    Parameters
     -- turtle_name   string     Turtle name (default: `turtle1`)
     -- x             float      x position (default: 0.0)
     -- y             float      y position (default: 0.0)
-    -- theta         float      yaw orientation angle (default: 0.0)
+    -- theta         float      yaw orientation angle (radians) (default: 0.0)
     -- call_timeout  float      Timeout for completion (default: 3.0 seconds)
     -- wait_timeout  float      Duration to wait for service to become available (default: 3.0 seconds)
     -- service_name  string     Service name (default: `teleport_absolute`)
+
+    Outputs
     <= done             Service call returned result as expected
-    <= call_timeout     Service call did not return result successfully
+    <= failed           Failed to make service call successfully
+    <= call_timeout     Service call did not return timely result
     <= unavailable      Service is unavailable
+
+    User data
+    ># pose      float[]     Optional 2 (x, y) or 3 elements (x, y, theta_radians) as list of numbers
     """
 
     def __init__(self, turtle_name='turtle1', x=0.0, y=0.0, theta=0.0,
                  call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'):
         """Declare outcomes, input_keys, and output_keys by calling the EventState super constructor."""
-        super(TeleportAbsoluteState, self).__init__(outcomes=['done', 'call_timeout', 'unavailable'])
+
+        super(TeleportAbsoluteState, self).__init__(outcomes=['done', 'failed', 'call_timeout', 'unavailable'],
+                                                    input_keys=['pose'])
 
         ProxyServiceCaller.initialize(TeleportAbsoluteState._node)
 
@@ -81,7 +90,7 @@ class TeleportAbsoluteState(EventState):
             # Waiting for result.
             # We will do this in a non-blocking way
             if self._srv.done(self._srv_topic):
-                _ = self._srv.result(self._srv_topic)  # grab empty result, but nothing to check here
+                _ = self._srv.result(self._srv_topic)  # grab empty result, but nothing to check here presume success
                 self._return = 'done'
             else:
 
@@ -109,6 +118,27 @@ class TeleportAbsoluteState(EventState):
 
         i.e. a transition from another state to this one is taken.
         """
+
+        if 'pose' in userdata and isinstance(userdata.pose, list):
+            try:
+                self._srv_request.x = userdata.pose[0]
+                self._srv_request.y = userdata.pose[1]
+                self._srv_request.theta = 0.0
+                if len(userdata.pose) == 3:
+                    # setting angle is optional
+                    self._srv_request.theta = userdata.pose[2]
+
+                Logger.localinfo(f"Using position = ({self._srv_request.x:.3f}, {self._srv_request.y:.3f}), "
+                                 f"angle={self._srv_request.theta:.3f} radians from userdata")
+
+            except Exception:  # pylint: disable=W0703
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - needs list of 2 or 3 numbers!")
+                self._return = 'failed'
+                return
+        else:
+            Logger.localinfo(f"Using position = ({self._srv_request.x:.3f}, {self._srv_request.y:.3f}), "
+                             f"angle={self._srv_request.theta:.3f} radians")
+
         self._start_time = self._node.get_clock().now()
         self._return = None  # reset the completion flag
         self._service_called = False
@@ -119,6 +149,7 @@ class TeleportAbsoluteState(EventState):
                 Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
         except Exception as exc:
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
+            self._return = 'failed'
 
     def _do_service_call(self):
         """Make the service call using async non-blocking."""
@@ -129,3 +160,4 @@ class TeleportAbsoluteState(EventState):
             self._service_called = True
         except Exception as exc:
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
+            raise exc

@@ -121,18 +121,19 @@ class TeleportAbsoluteState(EventState):
 
         if 'pose' in userdata and isinstance(userdata.pose, list):
             try:
-                self._srv_request.x = userdata.pose[0]
-                self._srv_request.y = userdata.pose[1]
+                self._srv_request.x = float(userdata.pose[0])
+                self._srv_request.y = float(userdata.pose[1])
                 self._srv_request.theta = 0.0
                 if len(userdata.pose) == 3:
                     # setting angle is optional
-                    self._srv_request.theta = userdata.pose[2]
+                    self._srv_request.theta = float(userdata.pose[2])
 
                 Logger.localinfo(f"Using position = ({self._srv_request.x:.3f}, {self._srv_request.y:.3f}), "
                                  f"angle={self._srv_request.theta:.3f} radians from userdata")
 
-            except Exception:  # pylint: disable=W0703
-                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - needs list of 2 or 3 numbers!")
+            except Exception as exc:  # pylint: disable=W0703
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
+                               f"needs list of 2 or 3 numbers!\n  {type(exc)} - {exc}")
                 self._return = 'failed'
                 return
         else:

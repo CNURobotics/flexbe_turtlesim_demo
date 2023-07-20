@@ -15,8 +15,8 @@ detailed [Example](docs/examples.md) states and behaviors to illustrate the use 
 
 ## Installation
 
-In addition to the standard FlexBE [flexbe_app](https://github.com/flexbe/flexbe_app) and
-[flexbe_behavior_engine](https://github.com/flexbe/flexbe_behavior_engine) packages,
+In addition to the standard FlexBE [flexbe_app](https://github.com/flexbe/flexbe_app/tree/ros2-devel) and
+[flexbe_behavior_engine](https://github.com/flexbe/flexbe_behavior_engine/tree/ros2-devel) packages,
 clone this repo into your ROS workspace:
 
 `git clone https://github.com/flexbe/flexbe_turtlesim_demo.git`
@@ -46,7 +46,8 @@ If building the FlexBE App from source, you must download and install the requir
 
 For an in-depth discussion of FlexBE capabilities refer to the [Examples](docs/examples.md).
 
-See the main [FlexBE documentation] for more  information about loading and launch behaviors.
+See the main [FlexBE tutorials] for more information about the history and development of FlexBE, and 
+for more information about loading and launching behaviors.
 
 ----
 
@@ -84,27 +85,29 @@ Start a demonstration behavior in fully autonomous mode
 
  > Note: Clicking on any image will give the high resolution view.
 
- After seeing the system run a few loops, just `Ctrl-C` to end the `behavior_onboard` and `be_launcher` nodes, and move on to the next demos.
+ After seeing the system run a few loops, just `Ctrl-C` to end the `behavior_onboard` and `be_launcher` nodes, 
+ and move on to the next demonstrations.
 
 ----
 
 ### FlexBE Collaborative Autonomy Demonstration
 
+A key design goal of the FlexBE is to support "Collaborative Autonomy" where an operator (or team of operators) can supervise and modify behaviors in response to changing conditions.  For more information about collaborative autonomy see [this paper](https://onlinelibrary.wiley.com/doi/full/10.1002/rob.21671)
 
-Ensure that a `turtlesim` node is running and graphic window is open; if not
+Ensure that a `turtlesim` node is running and its graphic window is open; if not
 
 `ros2 run  turtlesim turtlesim_node`.
 
-There are 3 approaches to launching the full FlexBE suite for operator supervised autonomy-base control.
+There are 3 approaches to launching the full FlexBE suite for operator supervised autonomy-based control.
 Use one (and only one) of the following approaches:
 
-1) FlexBE Quickstart
+#### 1) FlexBE Quickstart
 
 `ros2 launch flexbe_app flexbe_full.launch.py use_sim_time:=False`
 
   This starts all of FlexBE including both the *OCS* and *Onboard* software in one terminal.
 
-2) Launch the *OCS* and *Onboard* separately:
+#### 2) Launch the *OCS* and *Onboard* separately:
 
 `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
 
@@ -112,13 +115,12 @@ Use one (and only one) of the following approaches:
 
   This allows running the *Onboard* software *on board* the robot, and the *OCS* software on a separate machine to allow remote supervision.
 
-3) Launch each FlexBE component in separate terminals:
+#### 3) Launch each FlexBE component in separate terminals:
 
   * *Onboard*
 
 `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
 
-  ----
   * *OCS*
 
 `ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False`
@@ -131,10 +133,16 @@ Use one (and only one) of the following approaches:
 
 The *OCS* components can be run on a separate computer from the *onboard* components.
 
-#### Controlling Behaviors Via FlexBE User Interface (UI)
+After starting the system using one of these three approaches, the primary interaction is through the FlexBE UI, although
+you may monitor the terminals to see the confirming messages that are posted during operation.
+
+### Controlling Behaviors Via FlexBE User Interface (UI)
 
 Using the FlexBE UI application *Behavior Dashboard*, select *Load Behavior* from the upper middle tool bar, and
-select the `flexbe_turtlesim_demo_flexbe_behaviors` package from the dropdown menu and the `FlexBE Turtlesim Demo`.
+select the `flexbe_turtlesim_demo_flexbe_behaviors` package from the dropdown menu and the `FlexBE Turtlesim Demo` behavior.
+
+> Note: Here we use the term "behavior" to mean the state machine that induces a desired system behavior. We will use the term "state" 
+> to refer to a particular parameterized instance of a python class that defines the "state implementation".
 
 <img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="330">
 <img src="img/behavior_dashboard.png" alt="Behavior dashboard view" width="330">
@@ -143,15 +151,13 @@ select the `flexbe_turtlesim_demo_flexbe_behaviors` package from the dropdown me
 Once loaded, the behavior dashboard (middle image) is used to configure variables and inputs to the behavior as a whole.
 In this example we specify the topic for the turtle command velocity and the location of the "home" position for our turtle.
 
-> Note: Here we use the term "behavior" to mean the state machine that induces a desired system behavior. We will use the term "state" 
-> to refer to a particular parameterized instance of a python class that defines the "state implementation".
-
-The *Statemachine Editor* tab is used to inspect or edit existing behaviors, or build new ones.  
-The `FlexBE Turtlesim Demo` behavior is shown above in the rightmost images.  
+The *Statemachine Editor* tab is used to inspect or edit existing behaviors, or to build new behaviors.
+The `FlexBE Turtlesim Demo` behavior is shown above in the rightmost image.  
 FlexBE supports Hierarchical Finite State Machines (HFSM) so that the "EightMove" state is actually a "container" for
- a simple state machine that executes the figure 8 pattern using the provided FlexBE state implementations.
+ a simple state machine that executes the figure 8 pattern using the provided FlexBE state implementations, and "Turtlesim Input State Behavior" is a container for another entire behavior.  This allows users to define complex behaviors using composition of other behaviors 
+ as a HFSM.
 
-The `flexbe_turtlesim_demo_flexbe_states` package in this repository includes custom state implementations for:
+The `flexbe_turtlesim_demo_flexbe_states` package in this repository includes custom Python-based state implementations for:
 
   * [`clear_turtlesim_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/clear_turtlesim_state.py) - clear the turtlesim window using a *blocking* service call
   * [`rotate_turtle_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py) - Rotate turtle to user input angle
@@ -166,7 +172,7 @@ implements the `TimeCmdVelState` that publishes a fixed command velocity as a [T
 
 <img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="450">
 
-The other types of containers are described in the detailed examples. 
+Other types of containers are described in the detailed [Examples](docs/examples.md).
 
 ----
 
@@ -175,8 +181,10 @@ The *Runtime Control* tab allows the operator to launch behaviors on the onboard
 <img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="350">
 <img src="img/monitoring_view.png" alt="Monitoring running behavior." width="350">
 
-Click on the "Eight" transition to make one loop in the figure 8 pattern.  After completion it will bring you back
-to the *Operator Decision* state.  From there you can choose
+Click on the transition oval labeled "Eight" to make one loop in the figure 8 pattern.  
+After completion it will bring you back to the *Operator* Decision state.  
+
+From there you can choose
 
 * ["Home"](docs/home_behavior.md) to recenter your turtle, or
 * ["Clear"](docs/clear_behavior.md) to clear the path trace, or
@@ -190,9 +198,9 @@ runtime control.
 Clicking on the transition names above will take you to a page detailing that particular sub-behavior.
 
 FlexBE supports variable autonomy levels, so choosing "Full" autonomy allows the system to automatically choose to
-repeat the "Eight" transition.  As shown below, the other transitions in the `OperatorDecisionState` are configured to require 
-"Full" autonomy, but "Eight" only requires "High" autonomy; 
-in "Full" autonomy mode this transition is selected automatically. 
+autonomously repeat the "Eight" transition.  As shown below, the other transitions in the `OperatorDecisionState` 
+are configured to require "Full" autonomy, but "Eight" only requires "High" autonomy; 
+in "Full" autonomy mode this "Eight" transition is selected automatically. 
 This was the mode first demonstrated above without the OCS.
 
 <img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="500">

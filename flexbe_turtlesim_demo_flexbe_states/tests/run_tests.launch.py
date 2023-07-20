@@ -45,7 +45,9 @@ def generate_launch_description():
     path = join(flexbe_states_test_dir, "tests")
 
     testcases = ""
+    testcases += join(path, "clear_turtlesim_state.test") + "\n"
     testcases += join(path, "example_state.test") + "\n"
+    testcases += join(path, "rotate_turtle_state.test") + "\n"
     testcases += join(path, "teleport_absolute_state.test") + "\n"
     testcases += join(path, "timed_cmd_vel_state.test") + "\n"
 

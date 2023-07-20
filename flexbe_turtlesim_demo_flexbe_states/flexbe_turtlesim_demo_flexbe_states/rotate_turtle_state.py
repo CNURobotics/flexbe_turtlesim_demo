@@ -63,6 +63,7 @@ class RotateTurtleState(EventState):
                          output_keys=['duration'])
 
         self._timeout = Duration(seconds=timeout)
+        self._timeout_sec = timeout
         self._topic = action_topic
 
         # Create the action client when building the behavior.
@@ -70,7 +71,7 @@ class RotateTurtleState(EventState):
         # and makes sure only one client is used, no matter how often this state is used in a behavior.
         ProxyActionClient.initialize(RotateTurtleState._node)
 
-        self._client = ProxyActionClient({self._topic: RotateAbsolute})  # pass required clients as dict (topic: type)
+        self._client = ProxyActionClient({self._topic: RotateAbsolute}, wait_duration=0.0)  # pass required clients as dict (topic: type)
 
         # It may happen that the action client fails to send the action goal.
         self._error = False
@@ -123,7 +124,7 @@ class RotateTurtleState(EventState):
 
         # Send the goal.
         try:
-            self._client.send_goal(self._topic, goal)
+            self._client.send_goal(self._topic, goal, wait_duration=self._timeout_sec)
         except Exception as exc:  # pylint: disable=W0703
             # Since a state failure not necessarily causes a behavior failure,
             # it is recommended to only print warnings, not errors.

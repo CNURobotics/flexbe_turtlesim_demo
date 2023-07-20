@@ -38,7 +38,7 @@ class ClearTurtlesimState(EventState):
 
     def __init__(self, service_name='/clear', wait_timeout=3.0):
         # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-        super(ClearTurtlesimState, self).__init__(outcomes=['done', 'failed', 'unavailable'])
+        super().__init__(outcomes=['done', 'failed', 'unavailable'])
 
         ProxyServiceCaller.initialize(ClearTurtlesimState._node)
 

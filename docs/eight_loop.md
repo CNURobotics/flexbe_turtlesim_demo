@@ -5,17 +5,16 @@ a `StateMachine` container type in FlexBE.
 
 New states -- including basic states, containers, and entire behaviors -- are added in the editor view.
 
-<img src="img/editor_view_add.png" alt="State machine editor view adding a container." width="330">
-
+<img src="img/editor_view_add.png" alt="State machine editor view adding a container." width="450">
+<img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="450">
 
 Here we demonstrate adding a new `State machine` container type to the existing state machine.
 
 In the given `FlexBE Turtlesim Demo` behavior we added the container, then edited its name to be "EightMove" instead of "Container".
 
-Inside the "EightMove" container, we have defined a simple state machine that is just a sequence of 
+Inside the "EightMove" container, shown in the rightmost image above, we have defined a simple state machine that is just a sequence of 
 [`TimeCmdVelState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py) instances.
 
-<img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="450">
 
 ```python
 rom rclpy.duration import Duration

@@ -48,8 +48,8 @@ class TeleportAbsoluteState(EventState):
                  call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'):
         """Declare outcomes, input_keys, and output_keys by calling the EventState super constructor."""
 
-        super(TeleportAbsoluteState, self).__init__(outcomes=['done', 'failed', 'call_timeout', 'unavailable'],
-                                                    input_keys=['pose'])
+        super().__init__(outcomes=['done', 'failed', 'call_timeout', 'unavailable'],
+                         input_keys=['pose'])
 
         ProxyServiceCaller.initialize(TeleportAbsoluteState._node)
 

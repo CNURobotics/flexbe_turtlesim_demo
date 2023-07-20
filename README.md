@@ -186,6 +186,8 @@ After completion it will bring you back to the *Operator* Decision state.
 
 From there you can choose
 
+#### Selectable Transitions
+
 * ["Home"](docs/home_behavior.md) to recenter your turtle, or
 * ["Clear"](docs/clear_behavior.md) to clear the path trace, or
 * ["Eight"](docs/eight_loop.md) to do another loop, or

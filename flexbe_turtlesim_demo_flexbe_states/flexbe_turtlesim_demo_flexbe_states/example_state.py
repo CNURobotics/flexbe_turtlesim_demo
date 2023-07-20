@@ -57,7 +57,7 @@ class ExampleState(EventState):
         self._state_start_time = None
         self._state_enter_time = None
         self._state_exit_time = None
-
+        self._return = None
         self._elapsed_time = Duration(nanoseconds=2**63 - 1)
 
     @property

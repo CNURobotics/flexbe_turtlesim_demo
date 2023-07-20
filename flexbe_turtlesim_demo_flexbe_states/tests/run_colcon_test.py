@@ -36,9 +36,9 @@ from flexbe_testing.py_tester import PyTester
 class TestFlexBETurtleSimDemoStates(PyTester):
     """Pytest testing for flexbe_turtlesim_demo_flexbe_states."""
 
-    def __init__(self, *args, **kwargs):
-        """Initialize unit test."""
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     """Initialize unit test."""
+    #     super().__init__(*args, **kwargs)
 
     @classmethod
     def setUpClass(cls):
@@ -46,12 +46,24 @@ class TestFlexBETurtleSimDemoStates(PyTester):
         PyTester._package = "flexbe_turtlesim_demo_flexbe_states"
         PyTester._tests_folder = "tests"
 
-        super().setUpClass()  # Do this last after setting package and tests folder
+        PyTester.setUpClass()  # Do this last after setting package and tests folder
 
     # The tests
+    def test_clear_turtlesim_state(self):
+        """Run FlexBE unit test given .test file."""
+        self.run_test("clear_turtlesim_state", timeout_sec=2.0, max_cnt=5000)
+
     def test_example_state(self):
         """Run FlexBE unit test given .test file."""
         self.run_test("example_state")
+
+    def test_rotate_turtle_state(self):
+        """
+        Run FlexBE unit test given .test file.
+
+        This test requires longer wait than normal
+        """
+        self.run_test("rotate_turtle_state", timeout_sec=2.0, max_cnt=5000)
 
     def test_teleport_absolute_state(self):
         """
@@ -61,14 +73,6 @@ class TestFlexBETurtleSimDemoStates(PyTester):
         """
         self.run_test("teleport_absolute_state", timeout_sec=2.0, max_cnt=5000)
 
-    def test_timed_cmd_vel_statestate(self):
+    def test_timed_cmd_vel_state(self):
         """Run FlexBE unit test given .test file."""
         self.run_test("timed_cmd_vel_state", timeout_sec=2.0, max_cnt=5000)
-
-    # def test_wait_state_short(self):
-    #     """
-    #     Run FlexBE unit test given .test file.
-
-    #     This test requires longer wait than normal
-    #     """
-    #     self.run_test("wait_state_short", timeout_sec=1.5, max_cnt=5000)

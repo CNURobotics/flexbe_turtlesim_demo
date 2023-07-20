@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""clear turtlesim FlexBE state."""
 
 from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
@@ -116,7 +117,7 @@ class ClearTurtlesimState(EventState):
                 self._do_service_call()
             else:
                 Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
-        except Exception as exc:
+        except Exception as exc:  # pylint: disable=W0703
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
 
     def _do_service_call(self):
@@ -125,6 +126,6 @@ class ClearTurtlesimState(EventState):
             Logger.localinfo(f"{self._name}: Calling service {self._srv_topic} ...")
             self._service_called = True
             self._srv_result = self._srv.call(self._srv_topic, self._srv_request, wait_duration=0.0)
-        except Exception as e:
-            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(e)} - {str(e)}")
+        except Exception as exc:  # pylint: disable=W0703
+            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
             self._srv_result = None

@@ -1,16 +1,19 @@
 #!/usr/bin/env python
+
+"""behaviors package setup."""
+
 from setuptools import setup
 
-package_name = 'flexbe_turtlesim_demo_flexbe_behaviors'
+PACKAGE_NAME = 'flexbe_turtlesim_demo_flexbe_behaviors'
 
 setup(
-    name=package_name,
+    name=PACKAGE_NAME,
     version='1.3.1',
-    packages=[package_name],
+    packages=[PACKAGE_NAME],
     data_files=[
         ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
+            ['resource/' + PACKAGE_NAME]),
+        ('share/' + PACKAGE_NAME, ['package.xml']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

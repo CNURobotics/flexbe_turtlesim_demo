@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+"""Setup for package."""
+
 from glob import glob
 
 from setuptools import setup

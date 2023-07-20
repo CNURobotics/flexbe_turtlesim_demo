@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Rotate turtle FlexBE state."""
+
+import math
+
 from rclpy.duration import Duration
 
 from flexbe_core import EventState, Logger
@@ -21,8 +25,6 @@ from flexbe_core.proxy import ProxyActionClient
 
 # example import of required action
 from turtlesim.action import RotateAbsolute
-
-import math
 
 
 class RotateTurtleState(EventState):
@@ -73,6 +75,7 @@ class RotateTurtleState(EventState):
         # It may happen that the action client fails to send the action goal.
         self._error = False
         self._return = None  # Retain return value in case the outcome is blocked by operator
+        self._start_time = None
 
     def execute(self, userdata):
         # While this state is active, check if the action has been finished and evaluate the result.
@@ -121,11 +124,11 @@ class RotateTurtleState(EventState):
         # Send the goal.
         try:
             self._client.send_goal(self._topic, goal)
-        except Exception as e:
+        except Exception as exc:  # pylint: disable=W0703
             # Since a state failure not necessarily causes a behavior failure,
             # it is recommended to only print warnings, not errors.
             # Using a linebreak before appending the error log enables the operator to collapse details in the GUI.
-            Logger.logwarn('Failed to send the RotateAbsolute command:\n%s' % str(e))
+            Logger.logwarn(f"Failed to send the RotateAbsolute command:\n  {type(exc)} - {exc}")
             self._error = True
 
     def on_exit(self, userdata):

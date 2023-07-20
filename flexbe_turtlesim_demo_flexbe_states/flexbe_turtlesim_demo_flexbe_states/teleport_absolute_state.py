@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Teleport turtle FlexBE state."""
+
 from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
@@ -148,7 +150,7 @@ class TeleportAbsoluteState(EventState):
                 self._do_service_call()
             else:
                 Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
-        except Exception as exc:
+        except Exception as exc:  # pylint: disable=W0703
             Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
             self._return = 'failed'
 

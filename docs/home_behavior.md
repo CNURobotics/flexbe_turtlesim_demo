@@ -2,20 +2,20 @@
 
 The "Home" sub-behavior is implemented by a sequence of states as shown below:
 
-<img src="img/home_editor_view.png" alt="'Home' behavior." width="700">
+<img src="img/home_editor_view.png" alt="'Home' behavior." width="900">
 
 This behavior is first invoked on initial entry to the `FlexBE Turtlesim Demo` behavior 
 after clearing the screen.  After that, the behavior is invoked by selecting the "Home" transition 
-from the "Operator" decision state.
+from the "Operator" decision state shown in the monitoring view.
 
-The transition first invokes the "GoHome" `LogState`(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/log_state.py) with the message text `"Go to home position"`, then it transitions to the "Home" state instance of the `TeleportAbsoluteState`(../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/teleport_absolute_state.py) 
+The active state first transitions to the "GoHome" [`LogState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/log_state.py) with the message text `"Go to home position"`, then it transitions to the "Home" state instance of the [`TeleportAbsoluteState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/teleport_absolute_state.py) 
 state implementation.  The result is then logged by either "AtHome" or "ServiceCallFailed" states, and the system transitions back to the
 "Operator" decision state.
 
-As shown in the code fragment below, the `TeleportAbsoluteState` provides a FlexBE interface to the `TeleportAbsolute` service provided by the `turtlesim` node.  The node can accept the position as either input parameters in the `__init__` method invocation, or as `userdata`.
+As shown in the code fragment below, the `TeleportAbsoluteState` provides a FlexBE interface to the [`TeleportAbsolute`](https://docs.ros2.org/latest/api/turtlesim/srv/TeleportAbsolute.html) service provided by the `turtlesim` node.  The node can accept the position as either input parameters in the `__init__` method invocation, or as `userdata`.
 For a more indepth discussion of `userdata` see the ["Rotate"](rotate_behavior.md) discussion.
 
-The `__init__` method constructor sets up a `ProxyServiceCaller`(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/proxy/proxy_service_caller.py) instance to handle the actual calls. FlexBE uses a number of *Proxy* interfaces 
+The `__init__` method constructor sets up a [`ProxyServiceCaller`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/proxy/proxy_service_caller.py) instance to handle the actual calls. FlexBE uses a number of *Proxy* interfaces 
 to allow multiple states to share a single access point to the node for publish, subscribing, and calling interfaces to other nodes.
 The onboard system maintains a single ROS `node` as its point of access to external nodes.
 
@@ -87,7 +87,8 @@ class TeleportAbsoluteState(EventState):
 Given the above state implementation, the `FlexBE Turtlesim Demo` behavior defines an instance of this class, 
 and adds it to the top level state machine in [`flexbe_turtlesim_demo_sm.py`](../flexbe_turtlesim_demo_flexbe_behaviors/flexbe_turtlesim_demo_flexbe_behaviors/flexbe_turtlesim_demo_sm.py)
 
-A fragment of the `flexbe_turtlesim_demo_sm.py` behavior implementation is shown below:
+A fragment of the `flexbe_turtlesim_demo_sm.py` behavior implementation is shown below.  The values assigned 
+in the `TeleportAbsoluteState()` constructor are taken from the FlexBE editor window shown above.
 
 ```python
 _state_machine = OperatableStateMachine(outcomes=['finished'])

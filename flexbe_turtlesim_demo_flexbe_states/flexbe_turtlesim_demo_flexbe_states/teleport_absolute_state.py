@@ -27,6 +27,7 @@ class TeleportAbsoluteState(EventState):
     """
     This state teleports the Turtlesim turtle using TeleportAbsolute service.
 
+    Elements defined here for UI
     Parameters
     -- turtle_name   string     Turtle name (default: `turtle1`)
     -- x             float      x position (default: 0.0)
@@ -49,7 +50,6 @@ class TeleportAbsoluteState(EventState):
     def __init__(self, turtle_name='turtle1', x=0.0, y=0.0, theta=0.0,
                  call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'):
         """Declare outcomes, input_keys, and output_keys by calling the EventState super constructor."""
-
         super().__init__(outcomes=['done', 'failed', 'call_timeout', 'unavailable'],
                          input_keys=['pose'])
 
@@ -120,7 +120,6 @@ class TeleportAbsoluteState(EventState):
 
         i.e. a transition from another state to this one is taken.
         """
-
         if 'pose' in userdata and isinstance(userdata.pose, list):
             try:
                 self._srv_request.x = float(userdata.pose[0])

@@ -71,7 +71,8 @@ class RotateTurtleState(EventState):
         # and makes sure only one client is used, no matter how often this state is used in a behavior.
         ProxyActionClient.initialize(RotateTurtleState._node)
 
-        self._client = ProxyActionClient({self._topic: RotateAbsolute}, wait_duration=0.0)  # pass required clients as dict (topic: type)
+        self._client = ProxyActionClient({self._topic: RotateAbsolute},
+                                         wait_duration=0.0)  # pass required clients as dict (topic: type)
 
         # It may happen that the action client fails to send the action goal.
         self._error = False

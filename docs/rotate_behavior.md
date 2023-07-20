@@ -142,11 +142,24 @@ the next section discusses the "Rotate" transition from the `FlexBE Turtlesim De
 
 ## "Rotate" - Collaborative Autonomy with Operator Input
 
+The FlexBE Behavior Engine](https://github.com/flexbe/flexbe_behavior_engine) provides an [`InputState`](https://github.com/flexbe/flexbe_behavior_engine/flexbe_states/flexbe_states/input_state.py)
+that accepts operator data via a [`BehaviorInput` action](https://github.com/flexbe/flexbe_behavior_engine/flexbe_msgs/action/BehaviorInput.action) interface.
 
-An input key can be supplied to a state while a behavior is running with an Input State. This input state takes user input and maps it to an output key which can be used by other states. In order to utilize the input state an input action server must be run with the following command:
+Additionally, FlexBE provides a simple action server with PyQt based UI window as part of the [`flexbe_input` package](https://github.com/flexbe/flexbe_behavior_engine/flexbe_input).
 
 `ros2 run flexbe_input input_action_server`
 
-The action server will prompt a user for input and pass the input to the input state and set the result to an output key. To connect the input state and rotation state map the rotation state input key to the output key of input state.
+When the FlexBE onboard `InputState` requests data of a given type, the
+UI window will open, prompt the user with the provided text, and wait for user input.  After the user presses `Enter/Return` or clicks the `Submit` button, the data is serialized and sent back to the `InputState` as a string of bytes data as part of the action result.
+
+In the `FlexBE TurtleSim Demonstration (TODO)` statemachine,
+ the container labeled `Rotate` is itself a simple state machine;
+ that is, we have a Hierarchical Finite State Machine (HFSM).
+
+ <img src="img/rotate_sm_view.png" alt="Rotate sub-state machine." width="350">
+<img src="img/input_state_config.png" alt="Configuration of input state." width="350">
+<img src="img/input_ui.png" alt="Configuration of input state." width="350">
+
+In the `InputState` configuration, we specify result type 1 (`BehaviorInput.Goal.RESULT_FLOAT`) to request a single number from the user (Note, we accept integer values without decimals as well.)
 
 <img src="img/input_state_demo.png" alt="Using input state to provide data to turtle rotation state." width="350">

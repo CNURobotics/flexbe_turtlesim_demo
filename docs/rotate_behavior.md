@@ -55,6 +55,19 @@ class RotateTurtleState(EventState):
         self._timeout_sec = timeout
         self._topic = action_topic
 
+        # Create the action client when building the behavior.
+        # Using the proxy client provides asynchronous access to the result and status
+        # and makes sure only one client is used, no matter how often this state is used in a behavior.
+        ProxyActionClient.initialize(RotateTurtleState._node)
+
+        self._client = ProxyActionClient({self._topic: RotateAbsolute},
+                                         wait_duration=0.0)  # pass required clients as dict (topic: type)
+
+        # It may happen that the action client fails to send the action goal.
+        self._error = False
+        self._return = None  # Retain return value in case the outcome is blocked by operator
+        self._start_time = None
+
 ```
 
 Internally, the state implementation will use `userdata.angle` to access the stored data
@@ -74,7 +87,7 @@ is passed through the state machine.  Once defined, a `userdata` key/value pair
 persists for the life of the state machine.
 
 Now when the state is executed the turtle will rotate to the key value that was defined after converting to `radians` as required by the
-`RotateAbsolute` action provided by `Turtlesim`.
+[`RotateAbsolute`](https://docs.ros2.org/foxy/api/turtlesim/action/RotateAbsolute.html) action provided by `Turtlesim`.
 
 > Note: Normally, we suggest you stick to a consistent convention
 > for passing data, and ROS uses `radians` for angles by convention.  
@@ -89,6 +102,11 @@ def on_enter(self, userdata):
     # make sure to reset the error state since a previous state execution might have failed
     self._error = False
     self._return = None
+
+    if 'angle' not in userdata:
+        self._error = True
+        Logger.logwarn("RotateTurtleState requires userdata.angle key!")
+        return
 
     # Recording the start time to set rotation duration output
     self._start_time = self._node.get_clock().now()
@@ -152,7 +170,11 @@ the next section discusses the "Rotate" transition from the `FlexBE Turtlesim De
 
 ## "Rotate" - Collaborative Autonomy with Operator Input
 
-The FlexBE Behavior Engine](https://github.com/flexbe/flexbe_behavior_engine) provides an [`InputState`](https://github.com/flexbe/flexbe_behavior_engine/flexbe_states/flexbe_states/input_state.py)
+The "Rotate" sub-behavior is used to illustrate several features of FlexBE.
+
+#### InputState and Collaborative Autonomy
+
+The [FlexBE Behavior Engine](https://github.com/flexbe/flexbe_behavior_engine) provides an [`InputState`](https://github.com/flexbe/flexbe_behavior_engine/flexbe_states/flexbe_states/input_state.py)
 that accepts operator data via a [`BehaviorInput` action](https://github.com/flexbe/flexbe_behavior_engine/flexbe_msgs/action/BehaviorInput.action) interface.
 
 Additionally, FlexBE provides a simple action server with PyQt based UI window as part of the [`flexbe_input` package](https://github.com/flexbe/flexbe_behavior_engine/flexbe_input).
@@ -169,21 +191,66 @@ sent back to the `InputState` as a string of bytes data as part of the action re
 >   Warning The pickle module is not secure against erroneous or maliciously constructed data. 
 >   Never unpickle data received from an untrusted or unauthenticated source.
 
+#### Sub-behaviors with Behavior Container 
+
 In the `FlexBE Turtlesim Demo` statemachine,
  the container labeled `Rotate` is itself a simple state machine;
  that is, we have a Hierarchical Finite State Machine (HFSM).
- Furthermore, it is not just a state machine, but is in fact as separate behavior `Turtlesim Input State Behavior`.
- This behavior can be loaded and executed independent of `FlexBE Turtlesim Demo` behavior.
+ Furthermore, it is not just a state machine as in the ["Eight"](eight_loop.md), but is in fact a separate behavior 
+ `Turtlesim Input State Behavior` that can be loaded and executed in FlexBE independent of `FlexBE Turtlesim Demo` behavior.
 
-<img src="img/rotate_sm_view.png" alt="Rotate sub-state machine." width="350">
-<img src="img/input_state_config.png" alt="Configuration of input state." width="350">
-<img src="img/input_ui.png" alt="Configuration of input state." width="350">
+<img src="img/flexbe_input_userdata.png" alt="Turtlesim Input State Behavior data flow with InputState." width="450">
+<img src="img/input_ui_running.png" alt="Input user interface pop-up from input_action_server." width="450">
 
-In the `InputState` configuration, we specify result type 1 ([`BehaviorInput.Goal.RESULT_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user. 
+In the `InputState` configuration, we 
+  * specify result type 1 ([`BehaviorInput.Goal.RESULT_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user, 
+  * specify the prompt message for the user interface
+  * specify a timeout value for waiting on operator
+  * specify the output userdata key mapping
 
 > Note, for float types, we accept integer values without decimals as well.
 
-<img src="img/input_state_demo.png" alt="Using input state to provide data to turtle rotation state." width="350">
+When running the sub-behavior after requesting "Rotate", the `input_action_server` will pop up the dialog shown in rightmost image,
+which displays the specified prompt and a result type prompt specified by action goal (in this case a `1` for a `float`).
 
+After submitting the value, the operator will need to confirm "received" transition if running in "Low" autonomy, the rotate state will then 
+execute the rotate action using the provided `userdata`.
+
+#### ROS 2 Action Interfaces
+
+Both the `InputState` and `RotateTurtleState` make use of ROS [action](https://docs.ros.org/en/iron/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html) interfaces.
+
+These are the preferred way of interacting with external nodes within FlexBE.
+
+The `InputState` uses an action client that interacts with the `input_action_server` that provides a [`BehaviorInput`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action) server interface.
+
+The `turtlesim` node provides a [`RotateAbsolute`](https://docs.ros2.org/foxy/api/turtlesim/action/RotateAbsolute.html) action server interface.
+
+Both of these FlexBE states make use of a [`ProxyActionClient`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/proxy/proxy_action_client.py) that is set up in the `__init__` method of each state class.
+
+```python
+        self._client = ProxyActionClient({self._topic: RotateAbsolute},
+                                         wait_duration=0.0)  # pass required clients as dict (topic: type)
+```
+FlexBE uses "proxies" to provide a single interface for all states in a behavior.  This reduces the number of independent communication 
+channels that are required.
+
+Typically you create the `_client` in the constructor, and then make use of the proxy instance as needed in `on_enter`, and `execute`.
+
+If the state exits before the goal (e.g. if operator requests preemption), then we normally cancel the action goal `on_exit`.
+
+```python
+    def on_exit(self, userdata):
+        # Make sure that the action is not running when leaving this state.
+        # A situation where the action would still be active is for example when the operator manually triggers an outcome.
+
+        if not self._client.has_result(self._topic):
+            self._client.cancel(self._topic)
+            Logger.loginfo('Cancelled active action goal.')
+```
+----
+
+This example discussed the use of `InputState` to provide operator data to the onboard behavior in collaborative autonomy, the use of behavior composition to define more complex behaviors, and the use of ROS 2 `action` interfaces as the main approach to interacting with 
+more computationally intensive external nodes.
 
 [Back to the overview](../README.md#selectable-transitions)

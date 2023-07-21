@@ -112,6 +112,11 @@ class RotateTurtleState(EventState):
         self._error = False
         self._return = None
 
+        if 'angle' not in userdata:
+            self._error = True
+            Logger.logwarn("RotateTurtleState requires userdata.angle key!")
+            return
+
         # Recording the start time to set rotation duration output
         self._start_time = self._node.get_clock().now()
 

@@ -78,8 +78,8 @@ Start a demonstration behavior in fully autonomous mode
 
   This will launch the `FlexBE Turtlesim Demo`, which will move the turtle through a series of motions to generate
   a figure 8 pattern in full autonomy mode.  
-  This example demonstrates using FlexBE to be used to control a system fully autonomously without operator supervision, and serves to
-  verify that the installation is working properly.
+  This example demonstrates using FlexBE to control a system fully autonomously without operator supervision,
+  and serves to verify that the installation is working properly.
 
 <img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'FlexBE Turtlesim Demo' behavior." width="250">
 
@@ -145,16 +145,47 @@ you may monitor the terminals to see the confirming messages that are posted dur
 Some of the (sub-)behaviors below request operator input.  For this we provide a simple pop-up dialog window 
 as part of the `flexbe_input` package in the `flexbe_behavior_engine` repository.
 
-To use this operator input feature, run the []`input_action_server`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_input/flexbe_input/input_action_server.py) on the OCS computer:
+To use this operator input feature, run the [`input_action_server`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_input/flexbe_input/input_action_server.py) on the OCS computer:
 
 `ros2 run flexbe_input input_action_server`
 
 This interacts with the [`InputState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/input_state.py).
 
-This simple [`input_action_server`] demonstration is intended to provide basic functionality for limited 
+This simple `input_action_server` demonstration is intended to provide basic functionality for limited 
 primitive inputs such as numbers or list/tuples of numbers.
-You are encouraged to develop more complex user interfaces as needed.
+You are encouraged to develop more complex user interfaces for more complex data structures as needed to support more advanced types.
 
+ROS 2 messages support serializing using `pickle.dumps` and passing to the `InputState`.
+For example, the code fragment below illustrates creating a `Pose` message to send to FlexBE.
+
+```python
+import ast
+import pickle
+
+from geometry_msgs.msg import Pose
+from flexbe_msgs.action import BehaviorInput
+
+
+# On custom design side (either UI or user developed action server node)
+p = Pose()
+p.position.x = 42.
+
+result = BehaviorInput.Result()
+result.data = str(pickle.dumps(p))  # format data for sending as string of bytes
+
+# On input state side 
+input_data = ast.literal_eval(result.data)  # convert string to byte array
+response_data = pickle.loads(input_data)  # loads data into Python object
+
+print(f" respose =?= original : {p == response_data}")  # validate conversion
+```
+
+> Note: The `InputState` makes use of the `pickle` module, and is subject to this warning from the Pickle manual:
+
+>   Warning The pickle module is not secure against erroneous or maliciously constructed data. 
+>   Never unpickle data received from an untrusted or unauthenticated source.
+
+If using the `InputState` it is up to the user to protect their network from untrusted data.
 
 ### Controlling Behaviors Via FlexBE User Interface (UI)
 

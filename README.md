@@ -195,7 +195,7 @@ The `flexbe_turtlesim_demo_flexbe_states` package in this repository includes cu
 For example, the [`timed_cmd_vel_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py) 
 implements the `TimeCmdVelState` that publishes a fixed command velocity as a [Twist](https://docs.ros2.org/latest/api/geometry_msgs/msg/TwistStamped.html) (forward speed and turning rate) for a given time duration.  The `FlexBE Turtlesim Demo` behavior includes the `EightMove` sub-state machine container.  Opening that container - either by double clicking on container or single clicking and requesting to open the container - shows five state instances of the `TimedCmdVelState`.  The specific parameters values are set in the FlexBE Editor by clicking on a particular state; the "EightMove" state machine with specific "LeftTurn" state values are shown below.
 
-<img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="450">
+<img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="48%">
 
 Other types of containers are described in the detailed [Examples](docs/examples.md).
 
@@ -203,8 +203,8 @@ Other types of containers are described in the detailed [Examples](docs/examples
 
 The *Runtime Control* tab allows the operator to launch behaviors on the onboard system, and monitor their execution.
 
-<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="350">
-<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="350">
+<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="35%">
+<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="35%">
 
 Click on the transition oval labeled "Eight" to make one loop in the figure 8 pattern.  
 After completion it will bring you back to the *Operator* Decision state.  
@@ -230,8 +230,8 @@ are configured to require "Full" autonomy, but "Eight" only requires "High" auto
 in "Full" autonomy mode this "Eight" transition is selected automatically. 
 This was the mode first demonstrated above without the OCS.
 
-<img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="500">
-<img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="500">
+<img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="48%">
+<img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="48%">
 
 Read the descriptions linked to each transition and practice executing the different behaviors above.
 

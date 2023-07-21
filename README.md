@@ -117,24 +117,44 @@ Use one (and only one) of the following approaches:
 
 #### 3) Launch each FlexBE component in separate terminals:
 
-  * *Onboard*
+##### *Onboard*
 
 `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+  * This runs onboard and executes the HFSM behavior
 
-  * *OCS*
+##### *OCS*
 
 `ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False`
+  * This runs on OCS computer, listens to `'flexbe/mirror/outcome'` topic to follow the state-to-state transitions.
+    This allows the OCS to "mirror" what is happening onboard the robot
 
 `ros2 run flexbe_app run_app --ros-args --remap name:="flexbe_app" -p use_sim_time:=False`
+  * This launches the FlexBE user interface
 
 `ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
-
-`ros2 run flexbe_input input_action_server` - optional only required if using input behaviors described below
+  * This node listens to the UI and sends behavior structures and start requests to onboard 
+  * This can also be used separately from UI to launch behavior either on start up or by sending requests
 
 The *OCS* components can be run on a separate computer from the *onboard* components.
 
 After starting the system using one of these three approaches, the primary interaction is through the FlexBE UI, although
 you may monitor the terminals to see the confirming messages that are posted during operation.
+
+#### Optional Operator Input
+
+Some of the (sub-)behaviors below request operator input.  For this we provide a simple pop-up dialog window 
+as part of the `flexbe_input` package in the `flexbe_behavior_engine` repository.
+
+To use this operator input feature, run the []`input_action_server`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_input/flexbe_input/input_action_server.py) on the OCS computer:
+
+`ros2 run flexbe_input input_action_server`
+
+This interacts with the [`InputState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/input_state.py).
+
+This simple [`input_action_server`] demonstration is intended to provide basic functionality for limited 
+primitive inputs such as numbers or list/tuples of numbers.
+You are encouraged to develop more complex user interfaces as needed.
+
 
 ### Controlling Behaviors Via FlexBE User Interface (UI)
 
@@ -216,7 +236,7 @@ Review the detailed [Examples](docs/examples.md) for a more in depth discussion 
 
 TODO write ups:
 
- * Discussed advanced operations such as "Attaching" to a running behavior.
+ * Discuss advanced operations such as "Attaching" to a running behavior.
  * FAQ and debugging help.
 
 ----

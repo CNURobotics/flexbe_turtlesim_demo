@@ -149,36 +149,10 @@ To use this operator input feature, run the [`input_action_server`](https://gith
 
 `ros2 run flexbe_input input_action_server`
 
-This interacts with the [`InputState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/input_state.py).
+This interacts with the [`InputState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/input_state.py).  This simple `input_action_server` demonstration is intended to provide basic functionality for limited 
+primitive inputs such as numbers or `list`/`tuple`s of numbers.
 
-This simple `input_action_server` demonstration is intended to provide basic functionality for limited 
-primitive inputs such as numbers or list/tuples of numbers.
-You are encouraged to develop more complex user interfaces for more complex data structures as needed to support more advanced types.
-
-ROS 2 messages support serializing using `pickle.dumps` and passing to the `InputState`.
-For example, the code fragment below illustrates creating a `Pose` message to send to FlexBE.
-
-```python
-import ast
-import pickle
-
-from geometry_msgs.msg import Pose
-from flexbe_msgs.action import BehaviorInput
-
-
-# On custom design side (either UI or user developed action server node)
-p = Pose()
-p.position.x = 42.
-
-result = BehaviorInput.Result()
-result.data = str(pickle.dumps(p))  # format data for sending as string of bytes
-
-# On input state side 
-input_data = ast.literal_eval(result.data)  # convert string to byte array
-response_data = pickle.loads(input_data)  # loads data into Python object
-
-print(f" respose =?= original : {p == response_data}")  # validate conversion
-```
+See [Complex Data Input](docs/complex_data_input.md) for more information about the `InputState` usage.
 
 > Note: The `InputState` makes use of the `pickle` module, and is subject to this warning from the Pickle manual:
 

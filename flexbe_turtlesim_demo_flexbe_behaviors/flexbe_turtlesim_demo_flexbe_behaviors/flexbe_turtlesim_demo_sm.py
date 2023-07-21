@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 David Conner
+# Copyright July 2023 David Conner
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,10 +55,9 @@ class FlexBETurtlesimDemoSM(Behavior):
     Define FlexBE Turtlesim Demo.
 
     FlexBE demonstration using ROS Turtlesim from ROS tutorials.
-
-    Demonstrates several FlexBE capabilities including synchronous and async service calls,
-    action interfaces, and  operator input.
-
+    
+    Demonstrates several FlexBE capabilities including synchronous and async service calls, action interfaces, and  operator input.
+    
     """
 
     def __init__(self, node):
@@ -103,11 +102,9 @@ class FlexBETurtlesimDemoSM(Behavior):
         with _sm_goto_0:
             # x:41 y:116
             OperatableStateMachine.add('GetPose',
-                                       InputState(request=3, message="Input pose (x, y, radians)"),
-                                       transitions={'received': 'GoToPose', 'aborted': 'GoToFail', 'no_connection': 'GoToFail',
-                                                    'data_error': 'GoToFail'},
-                                       autonomy={'received': Autonomy.Off, 'aborted': Autonomy.Off,
-                                                 'no_connection': Autonomy.Off, 'data_error': Autonomy.Off},
+                                       InputState(request=3, message="Input pose (x, y, radians)", timeout=1.0),
+                                       transitions={'received': 'GoToPose', 'aborted': 'GoToFail', 'no_connection': 'GoToFail', 'data_error': 'GoToFail'},
+                                       autonomy={'received': Autonomy.Off, 'aborted': Autonomy.Off, 'no_connection': Autonomy.Off, 'data_error': Autonomy.Off},
                                        remapping={'data': 'pose'})
 
             # x:585 y:258
@@ -118,13 +115,9 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:319 y:101
             OperatableStateMachine.add('GoToPose',
-                                       TeleportAbsoluteState(turtle_name='turtle1', x=0.0, y=0.0, theta=0.0,
-                                                             call_timeout=3.0, wait_timeout=3.0,
-                                                             service_name='teleport_absolute'),
-                                       transitions={'done': 'finished', 'failed': 'GoToFail', 'call_timeout': 'GoToFail',
-                                                    'unavailable': 'GoToFail'},
-                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'call_timeout': Autonomy.Off,
-                                                 'unavailable': Autonomy.Off},
+                                       TeleportAbsoluteState(turtle_name='turtle1', x=0.0, y=0.0, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'),
+                                       transitions={'done': 'finished', 'failed': 'GoToFail', 'call_timeout': 'GoToFail', 'unavailable': 'GoToFail'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'call_timeout': Autonomy.Off, 'unavailable': Autonomy.Off},
                                        remapping={'pose': 'pose'})
 
         # x:975 y:134, x:130 y:365
@@ -133,36 +126,31 @@ class FlexBETurtlesimDemoSM(Behavior):
         with _sm_eightmove_1:
             # x:130 y:43
             OperatableStateMachine.add('Forward0',
-                                       TimedCmdVelState(target_time=3.99, velocity=0.5, rotation_rate=0.0,
-                                                        cmd_topic=cmd_vel, desired_rate=50),
+                                       TimedCmdVelState(target_time=3.99, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
                                        transitions={'done': 'LeftTurn'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:414 y:314
             OperatableStateMachine.add('Forward1',
-                                       TimedCmdVelState(target_time=7.99, velocity=0.5, rotation_rate=0.0,
-                                                        cmd_topic=cmd_vel, desired_rate=50),
+                                       TimedCmdVelState(target_time=7.99, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
                                        transitions={'done': 'RightTurn'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:663 y:38
             OperatableStateMachine.add('Forward2',
-                                       TimedCmdVelState(target_time=3.99, velocity=0.5, rotation_rate=0.0,
-                                                        cmd_topic=cmd_vel, desired_rate=50),
+                                       TimedCmdVelState(target_time=3.99, velocity=0.5, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
                                        transitions={'done': 'finished'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:179 y:211
             OperatableStateMachine.add('LeftTurn',
-                                       TimedCmdVelState(target_time=5.77, velocity=0.5, rotation_rate=0.667,
-                                                        cmd_topic=cmd_vel, desired_rate=50),
+                                       TimedCmdVelState(target_time=5.77, velocity=0.5, rotation_rate=0.667, cmd_topic=cmd_vel, desired_rate=50),
                                        transitions={'done': 'Forward1'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:625 y:189
             OperatableStateMachine.add('RightTurn',
-                                       TimedCmdVelState(target_time=5.77, velocity=0.5, rotation_rate=-0.667,
-                                                        cmd_topic=cmd_vel, desired_rate=50),
+                                       TimedCmdVelState(target_time=5.77, velocity=0.5, rotation_rate=-0.667, cmd_topic=cmd_vel, desired_rate=50),
                                        transitions={'done': 'Forward2'},
                                        autonomy={'done': Autonomy.Off})
 
@@ -171,8 +159,7 @@ class FlexBETurtlesimDemoSM(Behavior):
             OperatableStateMachine.add('ClearEntry',
                                        ClearTurtlesimState(service_name='/clear', wait_timeout=3.0),
                                        transitions={'done': 'Home', 'failed': 'Home', 'unavailable': 'Unavailable'},
-                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off,
-                                                 'unavailable': Autonomy.Off})
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'unavailable': Autonomy.Off})
 
             # x:911 y:133
             OperatableStateMachine.add('ClearFailed',
@@ -189,10 +176,8 @@ class FlexBETurtlesimDemoSM(Behavior):
             # x:893 y:15
             OperatableStateMachine.add('ClearWindow',
                                        ClearTurtlesimState(service_name='/clear', wait_timeout=3.0),
-                                       transitions={'done': 'Operator', 'failed': 'ClearFailed',
-                                                    'unavailable': 'ClearFailed'},
-                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off,
-                                                 'unavailable': Autonomy.Off})
+                                       transitions={'done': 'Operator', 'failed': 'ClearFailed', 'unavailable': 'ClearFailed'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'unavailable': Autonomy.Off})
 
             # x:654 y:490
             OperatableStateMachine.add('EightMove',
@@ -226,26 +211,16 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:178 y:77
             OperatableStateMachine.add('Home',
-                                       TeleportAbsoluteState(turtle_name='turtle1', x=5.544, y=5.544, theta=0.0,
-                                                             call_timeout=3.0, wait_timeout=3.0,
-                                                             service_name='teleport_absolute'),
-                                       transitions={'done': 'AtHome', 'failed': 'ServiceCallFailed',
-                                                    'call_timeout': 'ServiceCallFailed',
-                                                    'unavailable': 'ServiceCallFailed'},
-                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'call_timeout': Autonomy.Off,
-                                                 'unavailable': Autonomy.Off},
+                                       TeleportAbsoluteState(turtle_name='turtle1', x=5.544, y=5.544, theta=0.0, call_timeout=3.0, wait_timeout=3.0, service_name='teleport_absolute'),
+                                       transitions={'done': 'AtHome', 'failed': 'ServiceCallFailed', 'call_timeout': 'ServiceCallFailed', 'unavailable': 'ServiceCallFailed'},
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off, 'call_timeout': Autonomy.Off, 'unavailable': Autonomy.Off},
                                        remapping={'pose': 'home'})
 
             # x:651 y:133
             OperatableStateMachine.add('Operator',
-                                       OperatorDecisionState(outcomes=["Home", "Eight", "Quit", "Clear", "Rotate", "Pose"],
-                                                             hint="Eight", suggestion="Eight"),
-                                       transitions={'Home': 'GoHome', 'Eight': 'EightMove', 'Quit': 'finished',
-                                                    'Clear': 'ClearLog', 'Rotate': 'Turtlesim Input State Behavior',
-                                                    'Pose': 'GoTo'},
-                                       autonomy={'Home': Autonomy.Full, 'Eight': Autonomy.High,
-                                                 'Quit': Autonomy.Full, 'Clear': Autonomy.Full,
-                                                 'Rotate': Autonomy.Full, 'Pose': Autonomy.Full})
+                                       OperatorDecisionState(outcomes=["Home", "Eight", "Quit", "Clear", "Rotate", "Pose"], hint="Suggest 'Eight' for pattern move", suggestion="Eight"),
+                                       transitions={'Home': 'GoHome', 'Eight': 'EightMove', 'Quit': 'finished', 'Clear': 'ClearLog', 'Rotate': 'Turtlesim Input State Behavior', 'Pose': 'GoTo'},
+                                       autonomy={'Home': Autonomy.Full, 'Eight': Autonomy.High, 'Quit': Autonomy.Full, 'Clear': Autonomy.Full, 'Rotate': Autonomy.Full, 'Pose': Autonomy.Full})
 
             # x:934 y:534
             OperatableStateMachine.add('PoseDone',
@@ -267,15 +242,13 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:417 y:159
             OperatableStateMachine.add('ServiceCallFailed',
-                                       LogState(text="Failed during TeleportAbsolute service for turtlesim",
-                                                severity=Logger.REPORT_HINT),
+                                       LogState(text="Failed during TeleportAbsolute service for turtlesim", severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:471 y:391
             OperatableStateMachine.add('StopCmd',
-                                       TimedCmdVelState(target_time=0.01, velocity=0.0, rotation_rate=0.0,
-                                                        cmd_topic=cmd_vel, desired_rate=50),
+                                       TimedCmdVelState(target_time=0.01, velocity=0.0, rotation_rate=0.0, cmd_topic=cmd_vel, desired_rate=50),
                                        transitions={'done': 'Finished Eight-pattern'},
                                        autonomy={'done': Autonomy.Off})
 

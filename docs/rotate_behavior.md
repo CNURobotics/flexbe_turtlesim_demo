@@ -197,7 +197,7 @@ In the `FlexBE Turtlesim Demo` statemachine,
  the container labeled `Rotate` is itself a simple state machine;
  that is, we have a Hierarchical Finite State Machine (HFSM).
  Furthermore, it is not just a state machine as in the ["Eight"](eight_loop.md), but is in fact a separate behavior 
- `Turtlesim Input State Behavior` that can be loaded and executed in FlexBE independent of `FlexBE Turtlesim Demo` behavior.
+ [`Turtlesim Input State Behavior`](../flexbe_turtlesim_demo_flexbe_behaviors/flexbe_turtlesim_demo_flexbe_behaviors/turtlesim_input_state_behavior_sm.py) that can be loaded and executed in FlexBE independent of `FlexBE Turtlesim Demo` behavior.
 
 <img src="img/flexbe_input_userdata.png" alt="Turtlesim Input State Behavior data flow with InputState." width="450">
 <img src="img/input_ui_running.png" alt="Input user interface pop-up from input_action_server." width="450">

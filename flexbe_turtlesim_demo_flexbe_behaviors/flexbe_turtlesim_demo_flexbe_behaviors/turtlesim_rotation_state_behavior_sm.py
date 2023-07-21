@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2023 Collin Stone
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ class TurtlesimRotationStateBehaviorSM(Behavior):
     A simple behavior demonstrating the Turtlesim RotateAbsolute action interface.
 
     The example includes userdata defined in the statemachine configuration.
+
     """
 
     def __init__(self, node):
@@ -78,7 +79,7 @@ class TurtlesimRotationStateBehaviorSM(Behavior):
     def create(self):
         # x:1096 y:62, x:1095 y:363
         _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
-        _state_machine.userdata.angle = 90.0
+        _state_machine.userdata.angle_degrees = 90.0
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
@@ -92,7 +93,7 @@ class TurtlesimRotationStateBehaviorSM(Behavior):
                                                     'canceled': 'Log Canceled', 'timeout': 'Log Timeout'},
                                        autonomy={'rotation_complete': Autonomy.Off, 'failed': Autonomy.Off,
                                                  'canceled': Autonomy.Off, 'timeout': Autonomy.Off},
-                                       remapping={'angle': 'angle', 'duration': 'duration'})
+                                       remapping={'angle': 'angle_degrees', 'duration': 'duration'})
 
             # x:659 y:190
             OperatableStateMachine.add('Log Failed',

@@ -1,12 +1,12 @@
-# Example 4 - Using behaviors in other behaviors (a 3-layer HFSM)
+# Example 4 - Behavior composition - Using behaviors in other behaviors
 
-The `Example 4` behavior constructs a three-layer HFSM with the `Example 3` behavior inside a `Behavior` container that contains multiple `ConcurrencyContainer`(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/core/concurrency_container.py) with multiple `ExampleState`
+The `Example 4` behavior constructs a three-layer HFSM with the `Example 3` behavior inside a `Behavior` container that contains multiple [`ConcurrencyContainer`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/core/concurrency_container.py) states each with multiple `ExampleState`
 
 <img src="../img/example4_editor.png" alt="Example 4 editor view." width="450">
 <img src="../img/example3_top_level_sm.png" alt="Example 3 top-level state machine." width="350">
 
 Use the "Add Behavior" action shown circled in top of leftmost image; this will open the normal "Load Behavior" dialog.
-From there, you can modify the name to provide an appropriate local name for the container state.
+From there, you can modify the local state name for the behavior container state.
 
 Using the state editor view shown in the leftmost image above, you can modify the state machine parameters 
 defined for the state machine (as defined in ["Example 3"](example3.md)).
@@ -14,7 +14,8 @@ In this example, we modified the `waiting_time_a`.
 
 This ability to compose existing behaviors to build more complex behaviors is a powerful feature of FlexBE.
 
-While this example is relatively trivial for illustrative purposes, FlexBE has been used to develop much more complex behaviors.
+While this three-layer HFSM example is relatively trivial for illustrative purposes, FlexBE has been used to develop much 
+more complex behaviors using behavior composition.
 
 For some examples, see these publications:
 

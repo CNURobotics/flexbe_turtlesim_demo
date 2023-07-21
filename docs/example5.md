@@ -1,6 +1,9 @@
-# Example 4 - Priority Containers
+# Example 5 - Priority Containers
 
-The `Example 5` does not exist yet.
+A `PriorityContainer` works with a `ConcurrencyContainer` and is designed 
+to take priority over other states while it is active.
+
+The `Example 5` does not exist yet.  It is on the @todo list.
 
 #### TODO
 

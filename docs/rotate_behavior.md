@@ -203,12 +203,16 @@ In the `FlexBE Turtlesim Demo` statemachine,
 <img src="img/input_ui_running.png" alt="Input user interface pop-up from input_action_server." width="450">
 
 In the `InputState` configuration, we 
-  * specify result type 1 ([`BehaviorInput.Goal.RESULT_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user, 
+  * specify result type 1 ([`BehaviorInput.Goal.REQUEST_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user, 
   * specify the prompt message for the user interface
-  * specify a timeout value for waiting on operator
+  * specify a timeout value for the `input_action_server` to become available
   * specify the output userdata key mapping
 
-> Note, for float types, we accept integer values without decimals as well.
+> Note: For float types, we accept integer values without decimals as well.
+
+> Note: The `InputState` `timeout` refers to waiting for the action server to become available. 
+> The system will wait indefinitely for the operator to respond.
+
 
 When running the sub-behavior after requesting "Rotate", the `input_action_server` will pop up the dialog shown in rightmost image,
 which displays the specified prompt and a result type prompt specified by action goal (in this case a `1` for a `float`).

@@ -164,7 +164,8 @@ A few key points:
 * Again, these methods should *NOT* be long `blocking` calls.  
 
 > Note: While blocking calls are possible, prefer to use non-blocking calls such as `actions` or asychronous service calls.  
-See the [TurtleSim Deep Dive](docs/turtlesim_deep_dive.md) for more information about action and service handling.
+See the TurtleSim demo discussions for ["Home"](home_behavior.md), ["Clear"](clear_behavior.md), and ["Rotate"](rotate_behavior.md) 
+for more information about `action` and `service` handling.
 
 
 The [`ExampleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) `execute` function monitors the time since `on_enter`, and returns `done` when the *approximate* time has elapsed based on the designated update rate.

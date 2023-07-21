@@ -235,11 +235,13 @@ This was the mode first demonstrated above without the OCS.
 
 Read the descriptions linked to each transition and practice executing the different behaviors above.
 
+## Further Examples
+
 Review the detailed [Examples](docs/examples.md) for a more in depth discussion of the theory and implementation of FlexBE.
 
 ----
 
-TODO write ups:
+## TODO write ups:
 
  * Discuss advanced operations such as "Attaching" to a running behavior.
  * FAQ and debugging help.

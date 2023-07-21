@@ -148,7 +148,7 @@ If an exception occurs, the state `self._return` is marked as `failed`.
         i.e. a transition from another state to this one is taken.
         """
 
-        if 'pose' in userdata and isinstance(userdata.pose, list):
+        if 'pose' in userdata and isinstance(userdata.pose, (list, tuple)):
             try:
                 self._srv_request.x = float(userdata.pose[0])
                 self._srv_request.y = float(userdata.pose[1])

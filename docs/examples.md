@@ -12,5 +12,4 @@ behaviors.
 * [Example 2](docs/example2.md) - Basic state machine
 * [Example 3](docs/example3.md) - A HFSM behavior with concurrent states
 * [Example 4](docs/example4.md) - Using behaviors in other behaviors (a 3-layer HFSM)
-* [Example 5](docs/example5.md) - Priority containers
-* [TurtleSim Deep Dive](docs/turtlesim_deep_dive.md) - Deep dive into `action` and `service` interfaces
+* [Example 5](docs/example5.md) - Priority containers (@TODO)

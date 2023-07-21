@@ -1,22 +1,29 @@
 
 # RotateTurtleState and Userdata
 
-A key part of FlexBE that extends the concept beyond pure state machines is `userdata` that can be passed from one state to another.
+Two key parts of FlexBE that extends the concept beyond pure state machines are:
+* 1) composition of behaviors into HFSM
+* 2) `userdata` that can be passed from one state to another.
 
-For example, the [Rotate Turtle State](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py) uses
+For example, the [`RotateTurtleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py) uses
 `userdata` to define the desired angle.
 
-We will be our discussion with a simpler example, and then return to the specifics of the "Rotate" transition in `FlexBE Turtlesim Demonstration`.
+We will begin our discussion with a simpler example behavior and then return to the specifics of the "Rotate" transition in `FlexBE Turtlesim Demonstration`.
 
 ----
 
-### `Rotate Turtlesim Demonstration (TODO)`
+### `Turtlesim Rotation State Behavior`
 
-Separate from the `FlexBE Turtlesim Demonstration (TODO)` behavior, we have provided a simpler `Rotate Turtlesim Demonstration (TODO)` behavior.
-We will start by describing that first.
+Separate from the `Turtlesim Input State Behavior` sub-behavior used by the `FlexBE Turtlesim Demo`, 
+we have provided a simpler `Turtlesim Rotation State Behavior` behavior.
 
-Each state can accept data according to specified `Input Keys`.
-These key names can be remapped at the state level.
+We will start by describing that first, you may load this behavior and execute if you wish.
+
+Each FlexBE state can accept data according to specified `Input Keys`.
+These key names can be remapped to a different name at the state level.
+
+For example, the `RotateTurtleState` implementation specifies an input key called `angle` and 
+an output key `duration that is passed to downstream states.
 
 ```Python
 class RotateTurtleState(EventState):
@@ -44,34 +51,37 @@ class RotateTurtleState(EventState):
                          input_keys=['angle'],
                          output_keys=['duration'])
 
+        self._timeout = Duration(seconds=timeout)
+        self._timeout_sec = timeout
+        self._topic = action_topic
+
 ```
-The `RotateTurtleState` implementation specifies an input key called `angle` and an output key `duration`.  Internally, the state implementation will use `userdata.angle` to access the stored data
+
+Internally, the state implementation will use `userdata.angle` to access the stored data
 using the FlexBE core [`userdata.py` class](https://github.com/flexbe/flexbe_behavior_engine/flexbe_core/flexbe_core/userdata.py) that
 extends the capabilities of the basic `dict` object.
 
-<img src="img/key_remap_edit.png" alt="Remapping keys." width="300">
-<img src="img/data_flow_graph.png" alt="Data flowing into Rotation State." width="300">
-<img src="img/sm_userdata_dashboard.png" alt="Defining user data at the state machine level." width="300">
+In the `Turtlesim Rotation State Behavior` behavior, we define
+the `userdata` at the FlexBE UI Dashboard as `angle_degrees`, the desired
+angle in degrees.  In the `RotateTurtleState` editor, we specify that the required `angle` key 
+uses the remapped `angle_degrees` key value as shown below.
 
-The `Data Flow` view allows the behavior designer to view how userdata
-is passed through the state machine.  Once defined, a `userdata` value
-persists for the life of the state machine, but is only accessible
-within states that access that mapped key.
+<img src="img/rotate_state_userdata.png" alt="State machine level userdata." width="450">
+<img src="img/data_flow_graph.png" alt="Data flow view in Editor." width="450">
 
-In the `Rotate Turtlesim Demonstration (TODO)` behavior, we define
-the `userdata` at the FlexBE UI Dashboard.  In this case, the desired
-angle in degrees.
+The right image also shows the `Data Flow` view allows the behavior designer to view how `userdata`
+is passed through the state machine.  Once defined, a `userdata` key/value pair
+persists for the life of the state machine.
 
 Now when the state is executed the turtle will rotate to the key value that was defined after converting to `radians` as required by the
 `RotateAbsolute` action provided by `Turtlesim`.
 
 > Note: Normally, we suggest you stick to a consistent convention
-> for passing data, and ROS uses `radians` by convention.  
-> Here, we chose `degrees` here to illustrate data conversions
-> and for operator convenience at the UI.
+> for passing data, and ROS uses `radians` for angles by convention.  
+> Here, we chose `degrees` to illustrate data conversions and for operator convenience at the UI.
 
-The `userdata` is passed to the standard `on_enter`, `execute`, and `on_exit` methods of each FlexBE state.  Here we validate the data and
-use to create a `Goal` request for the `RotateAbsolute` action.
+The `userdata` is passed to the standard `on_enter`, `execute`, and `on_exit` methods of each FlexBE state.
+Here we validate the data and use to create a `Goal` request for the `RotateAbsolute` action.
 
 ```python
 def on_enter(self, userdata):
@@ -93,7 +103,7 @@ def on_enter(self, userdata):
 
     # Send the goal.
     try:
-        self._client.send_goal(self._topic, goal)
+            self._client.send_goal(self._topic, goal, wait_duration=self._timeout_sec)
     except Exception as e:
         # Since a state failure not necessarily causes a behavior failure,
         # it is recommended to only print warnings, not errors.
@@ -150,17 +160,28 @@ Additionally, FlexBE provides a simple action server with PyQt based UI window a
 `ros2 run flexbe_input input_action_server`
 
 When the FlexBE onboard `InputState` requests data of a given type, the
-UI window will open, prompt the user with the provided text, and wait for user input.  After the user presses `Enter/Return` or clicks the `Submit` button, the data is serialized and sent back to the `InputState` as a string of bytes data as part of the action result.
+UI window will open, prompt the user with the provided text, and wait for user input.
+After the user presses `Enter/Return` or clicks the `Submit` button, the data is serialized and 
+sent back to the `InputState` as a string of bytes data as part of the action result.
 
-In the `FlexBE TurtleSim Demonstration (TODO)` statemachine,
+> Note: The `InputState` makes use of the `pickle` module, and is subject to this warning from the Pickle manual:
+
+>   Warning The pickle module is not secure against erroneous or maliciously constructed data. 
+>   Never unpickle data received from an untrusted or unauthenticated source.
+
+In the `FlexBE Turtlesim Demo` statemachine,
  the container labeled `Rotate` is itself a simple state machine;
  that is, we have a Hierarchical Finite State Machine (HFSM).
+ Furthermore, it is not just a state machine, but is in fact as separate behavior `Turtlesim Input State Behavior`.
+ This behavior can be loaded and executed independent of `FlexBE Turtlesim Demo` behavior.
 
- <img src="img/rotate_sm_view.png" alt="Rotate sub-state machine." width="350">
+<img src="img/rotate_sm_view.png" alt="Rotate sub-state machine." width="350">
 <img src="img/input_state_config.png" alt="Configuration of input state." width="350">
 <img src="img/input_ui.png" alt="Configuration of input state." width="350">
 
-In the `InputState` configuration, we specify result type 1 (`BehaviorInput.Goal.RESULT_FLOAT`) to request a single number from the user (Note, we accept integer values without decimals as well.)
+In the `InputState` configuration, we specify result type 1 ([`BehaviorInput.Goal.RESULT_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user. 
+
+> Note, for float types, we accept integer values without decimals as well.
 
 <img src="img/input_state_demo.png" alt="Using input state to provide data to turtle rotation state." width="350">
 

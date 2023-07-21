@@ -185,7 +185,7 @@ FlexBE supports Hierarchical Finite State Machines (HFSM) so that the "EightMove
 The `flexbe_turtlesim_demo_flexbe_states` package in this repository includes custom Python-based state implementations for:
 
   * [`clear_turtlesim_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/clear_turtlesim_state.py) - clear the turtlesim window using a *blocking* service call
-  * [`rotate_turtle_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py) - Rotate turtle to user input angle
+  * [`rotate_turtle_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py) - Rotate turtle to user input angle using an `action` interface
   * [`teleport_absolute_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/teleport_absolute_state.py) - go to designated position using a *non-blocking* service call
   * [`timed_cmd_vel_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py) - publish command velocity using a specified desired update rate
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2023 David Conner
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +23,7 @@
 ###########################################################
 
 """
-Example behavior that contains a (sub-)behavior.
-
-This behavior contains the Example 3 behavior as a state.
+Define Example 4.
 
 Created on Wed Jul 05 2023
 @author: David Conner
@@ -49,9 +47,12 @@ from flexbe_turtlesim_demo_flexbe_behaviors.example_3_sm import Example3SM
 
 class Example4SM(Behavior):
     """
+    Define Example 4.
+
     Example behavior that contains a (sub-)behavior.
 
     This behavior contains the Example 3 behavior as a state.
+
     """
 
     def __init__(self, node):
@@ -66,7 +67,7 @@ class Example4SM(Behavior):
         PriorityContainer.initialize_ros(node)
         Logger.initialize(node)
         LogState.initialize_ros(node)
-        self.add_behavior(Example3SM, 'Example 3', node)
+        self.add_behavior(Example3SM, 'Example Concurrent Behavior', node)
 
         # Additional initialization code can be added inside the following tags
         # [MANUAL_INIT]
@@ -104,7 +105,8 @@ class Example4SM(Behavior):
 
             # x:208 y:179
             OperatableStateMachine.add('Example Concurrent Behavior',
-                                       self.use_behavior(Example3SM, 'Example 3'),
+                                       self.use_behavior(Example3SM, 'Example Concurrent Behavior',
+                                           parameters={'waiting_time_a': 5.0}),
                                        transitions={'finished': 'B', 'failed': 'C'},
                                        autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
 

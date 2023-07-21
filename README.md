@@ -81,7 +81,7 @@ Start a demonstration behavior in fully autonomous mode
   This example demonstrates using FlexBE to control a system fully autonomously without operator supervision,
   and serves to verify that the installation is working properly.
 
-<img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'FlexBE Turtlesim Demo' behavior." width="250">
+<img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'FlexBE Turtlesim Demo' behavior." width="25%">
 
  > Note: Clicking on any image will give the high resolution view.
 
@@ -169,9 +169,9 @@ select the `flexbe_turtlesim_demo_flexbe_behaviors` package from the dropdown me
 > Note: Here we use the term "behavior" to mean the state machine that induces a desired system behavior. We will use the term "state" 
 > to refer to a particular parameterized instance of a python class that defines the "state implementation".
 
-<img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="330">
-<img src="img/behavior_dashboard.png" alt="Behavior dashboard view" width="330">
-<img src="img/editor_view.png" alt="State machine editor view" width="330">
+<img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="15%">
+<img src="img/behavior_dashboard.png" alt="Behavior dashboard view" width="15%">
+<img src="img/editor_view.png" alt="State machine editor view" width="15%">
 
 Once loaded, the behavior dashboard (middle image) is used to configure variables and inputs to the behavior as a whole.
 In this example we specify the topic for the turtle command velocity and the location of the "home" position for our turtle.
@@ -195,7 +195,7 @@ The `flexbe_turtlesim_demo_flexbe_states` package in this repository includes cu
 For example, the [`timed_cmd_vel_state`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py) 
 implements the `TimeCmdVelState` that publishes a fixed command velocity as a [Twist](https://docs.ros2.org/latest/api/geometry_msgs/msg/TwistStamped.html) (forward speed and turning rate) for a given time duration.  The `FlexBE Turtlesim Demo` behavior includes the `EightMove` sub-state machine container.  Opening that container - either by double clicking on container or single clicking and requesting to open the container - shows five state instances of the `TimedCmdVelState`.  The specific parameters values are set in the FlexBE Editor by clicking on a particular state; the "EightMove" state machine with specific "LeftTurn" state values are shown below.
 
-<img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="48%">
+<img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="25%">
 
 Other types of containers are described in the detailed [Examples](docs/examples.md).
 
@@ -203,8 +203,8 @@ Other types of containers are described in the detailed [Examples](docs/examples
 
 The *Runtime Control* tab allows the operator to launch behaviors on the onboard system, and monitor their execution.
 
-<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="35%">
-<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="35%">
+<img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="25%">
+<img src="img/monitoring_view.png" alt="Monitoring running behavior." width="25%">
 
 Click on the transition oval labeled "Eight" to make one loop in the figure 8 pattern.  
 After completion it will bring you back to the *Operator* Decision state.  
@@ -230,8 +230,8 @@ are configured to require "Full" autonomy, but "Eight" only requires "High" auto
 in "Full" autonomy mode this "Eight" transition is selected automatically. 
 This was the mode first demonstrated above without the OCS.
 
-<img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="48%">
-<img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="48%">
+<img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="25%">
+<img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="25%">
 
 Read the descriptions linked to each transition and practice executing the different behaviors above.
 

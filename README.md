@@ -81,8 +81,9 @@ Start a demonstration behavior in fully autonomous mode
   This example demonstrates using FlexBE to control a system fully autonomously without operator supervision,
   and serves to verify that the installation is working properly.
 
-<img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'FlexBE Turtlesim Demo' behavior." width="25%">
-
+<p float="center">
+  <img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'FlexBE Turtlesim Demo' behavior." width="35%">
+</p>
  > Note: Clicking on any image will give the high resolution view.
 
  After seeing the system run a few loops, just `Ctrl-C` to end the `behavior_onboard` and `be_launcher` nodes, 
@@ -169,10 +170,11 @@ select the `flexbe_turtlesim_demo_flexbe_behaviors` package from the dropdown me
 > Note: Here we use the term "behavior" to mean the state machine that induces a desired system behavior. We will use the term "state" 
 > to refer to a particular parameterized instance of a python class that defines the "state implementation".
 
-<img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="15%">
-<img src="img/behavior_dashboard.png" alt="Behavior dashboard view" width="15%">
-<img src="img/editor_view.png" alt="State machine editor view" width="15%">
-
+<p float="center">
+  <img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="30%">
+  <img src="img/behavior_dashboard.png" alt="Behavior dashboard view" width="30%">
+  <img src="img/editor_view.png" alt="State machine editor view" width="30%">
+</p>
 Once loaded, the behavior dashboard (middle image) is used to configure variables and inputs to the behavior as a whole.
 In this example we specify the topic for the turtle command velocity and the location of the "home" position for our turtle.
 

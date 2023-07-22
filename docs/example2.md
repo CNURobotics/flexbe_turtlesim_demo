@@ -12,10 +12,11 @@ the `A` example state.
 > Note: In low autonomy, you must click the `done` transition after the `Start` state to manually 
 > transition to the `A` state as the transition is blocked due to autonomy level.
 
-<img src="../img/example2_dashboard.png" alt="Example 2 loaded." width="350">
-<img src="../img/example2_sm_property.png" alt="Example 2 state machine with properties." width="350">
-<img src="../img/example2_a_state_enter.png" alt="Example 2 state machine running." width="350">
-
+<p float="center">
+  <img src="../img/example2_dashboard.png" alt="Example 2 loaded." width="30%">
+  <img src="../img/example2_sm_property.png" alt="Example 2 state machine with properties." width="30%">
+  <img src="../img/example2_a_state_enter.png" alt="Example 2 state machine running." width="30%">
+</p>
 
 In addition to the `LogState` from `Example 1`, this behavior uses the `ExampleState` provided as part of this repo in 
 `flexbe_turtlesim_demo_flexbe_states`.  You are free to develop your own FlexBE state implementations that inherit from
@@ -230,8 +231,10 @@ below shows the onboard terminal output as the execute method continues to be ca
 is called.  As the required autonomy level for this outcome is `off`, the system exits the behavior and `on_stop` is called for all
 states.  The rightmost image shows the final output on the FlexBE UI as after the behavior completes and the system is ready for more.
 
-<img src="../img/example2_onboard.png" alt="Example 2 log messages." height="300">
-<img src="../img/example2_complete.png" alt="Example 2 log messages." height="300">
+<p float="center">
+  <img src="../img/example2_onboard.png" alt="Example 2 log messages." height="30%">
+  <img src="../img/example2_complete.png" alt="Example 2 log messages." height="30%">
+</p>
 
 For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "done" after the log state, or to "Off" which will require the operator to confirm every transition.
 

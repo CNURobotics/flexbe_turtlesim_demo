@@ -5,8 +5,10 @@ a `StateMachine` container type in FlexBE.
 
 New states -- including basic states, containers, and entire behaviors -- are added in the editor view.
 
-<img src="img/editor_view_add.png" alt="State machine editor view adding a container." width="450">
-<img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="450">
+<p float="center">
+  <img src="img/editor_view_add.png" alt="State machine editor view adding a container." width="45%">
+  <img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="45%">
+</p>
 
 Here we demonstrate adding a new `State machine` container type to the existing state machine.
 

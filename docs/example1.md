@@ -24,10 +24,11 @@ variable `log_msg`.  In the upper left, the "Overview" pane provides the name of
 information.  The behavior name is converted into the implementation Python file name, `example_1_sm.py` and class name `Example1SM`.
 In addition to the Python file, a "behavior manifest" `example_1.xml` is written as well.
 
-
-<img src="../img/example1_loading.png" alt="Loading Example 1." width="300">
-<img src="../img/example1_config.png" alt="Example 1 configuration." width="300">
-<img src="../img/example1_sm.png" alt="Example 1 state machine." width="300">
+<p float="center">
+  <img src="../img/example1_loading.png" alt="Loading Example 1." width="30%">
+  <img src="../img/example1_config.png" alt="Example 1 configuration." width="30%">
+  <img src="../img/example1_sm.png" alt="Example 1 state machine." width="30%">
+</p>
 
 FlexBE Behavior editor view for "Example 1" behavior.  Click on any image to see the high resolution annotated versions.
 
@@ -153,9 +154,11 @@ After clicking on the "done" transition, the current active state transitions to
 image below.  As this is during the wait period the output transition is shown in gray, whereas the center image shows the transition that is active highlighted in yellow.  The operator can wait for the state to finish, or can choose to preempt the state and force the "done" transition by clicking on the label oval prior to the wait time completing.  Because this state has "Off" autonomy level, the behavior will autonomously complete and return outcome "finished" as it returns to the "Start" pane shown in the leftmost image.
 
 
-<img src="../img/example1_start_low.png" alt="Example 1 start screen." width="250">
-<img src="../img/example1_low_block.png" alt="Example 1 log messages." width="250">
-<img src="../img/example1_wait.png" alt="Example 1 waiting." width="250">
+<p float="center">
+  <img src="../img/example1_start_low.png" alt="Example 1 start screen." width="30%">
+  <img src="../img/example1_low_block.png" alt="Example 1 log messages." width="30%">
+  <img src="../img/example1_wait.png" alt="Example 1 waiting." width="30%">
+</p>
 
 For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "done" after the log state.
 

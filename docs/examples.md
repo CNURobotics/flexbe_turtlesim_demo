@@ -8,8 +8,8 @@ You are free to jump into any example, but they are designed to
 get progressively more complex and take advantage of earlier
 behaviors.
 
-* [Example 1](docs/example1.md) - Basic FlexBE state implementations
-* [Example 2](docs/example2.md) - Basic state machine
-* [Example 3](docs/example3.md) - A HFSM behavior with concurrent states
-* [Example 4](docs/example4.md) - Behavior composition - using behaviors in other behaviors (a 3-layer HFSM)
-* [Example 5](docs/example5.md) - Priority containers
+* [Example 1](example1.md) - Basic FlexBE state implementations
+* [Example 2](example2.md) - Basic state machine
+* [Example 3](example3.md) - A HFSM behavior with concurrent states
+* [Example 4](example4.md) - Behavior composition - using behaviors in other behaviors (a 3-layer HFSM)
+* [Example 5](example5.md) - Priority containers

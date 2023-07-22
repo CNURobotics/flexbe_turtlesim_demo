@@ -2,8 +2,10 @@
 
 The `Example 4` behavior constructs a three-layer HFSM with the `Example 3` behavior inside a `Behavior` container that contains multiple [`ConcurrencyContainer`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/core/concurrency_container.py) states each with multiple `ExampleState`
 
-<img src="../img/example4_editor.png" alt="Example 4 editor view." width="450">
-<img src="../img/example3_top_level_sm.png" alt="Example 3 top-level state machine." width="350">
+<p float="center">
+  <img src="../img/example4_editor.png" alt="Example 4 editor view." width="40%">
+  <img src="../img/example3_top_level_sm.png" alt="Example 3 top-level state machine." width="40%">
+</p>
 
 Use the "Add Behavior" action shown circled in top of leftmost image; this will open the normal "Load Behavior" dialog.
 From there, you can modify the local state name for the behavior container state.

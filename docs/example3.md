@@ -52,8 +52,8 @@ The leftmost image below shows the behavior of the `Concurrent_OR` container, an
 of the `Concurrent_AND` container given the respective 4.0 and 2.0 second wait times for this example.
 
 <p float="center">
-  <img src="../img/example3_onboard_or.png" alt="Example 3 onboard terminal logging during Concurrent_OR" height="30%">
-  <img src="../img/example3_onboard_and.png" alt="Example 3 onboard terminal logging during Concurrent_AND." height="30%">
+  <img src="../img/example3_onboard_or.png" alt="Example 3 onboard terminal logging during Concurrent_OR" width="45%">
+  <img src="../img/example3_onboard_and.png" alt="Example 3 onboard terminal logging during Concurrent_AND." width="45%">
 </p>
 
 > Note: The current release version of FlexBE UI (3.x.x) only shows the first state in the `Concurrent` container.

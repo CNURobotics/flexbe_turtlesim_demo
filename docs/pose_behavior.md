@@ -7,8 +7,10 @@ The "Pose" transition makes use a `StateMachine` container with three states, in
 
 The `InputState` remaps its `userdata` `data` key to provide the `pose` key used by the `TeleportAbsoluteState`.
 
-<img src="img/pose_behavior.png" alt="Pose behavior data flow." width="450">
-<img src="img/pose_input.png" alt="Pose input as list of numbers." width="450">
+<p float="center">
+  <img src="img/pose_behavior.png" alt="Pose behavior data flow." width="45%">
+  <img src="img/pose_input.png" alt="Pose input as list of numbers." width="45%">
+</p>
 
 In the `InputState` configuration, we 
   * specify result type 3 ([`BehaviorInput.Goal.REQUEST_3D`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a `list` (or `tuple`) of three numbers from the user, 

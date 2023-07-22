@@ -8,8 +8,10 @@ This repo provides a self contained introduction to FlexBE with a
 "Quick Start" based on the simple 2D ROS Turtlesim [Turtlesim] simulator.
 The repo provides all of the flexbe_turtlesim_demo-specific states and behaviors to provide a simple demonstration of FlexBE's capabilities using a minimal number of the ROS  packages.
 
-In addition to the Turtlesim demonstration, the repo includes several
-detailed [Example](docs/examples.md) states and behaviors to illustrate the use and capabilities of FlexBE.
+## Tutorial Examples
+
+In addition to the Turtlesim demonstration presented below, the repo includes several
+detailed [Examples](docs/examples.md) states and behaviors to illustrate the use and capabilities of FlexBE.
 
 ----
 
@@ -237,7 +239,7 @@ in "Full" autonomy mode this "Eight" transition is selected automatically.
 This was the mode first demonstrated above without the OCS.
 
 <p float="center">
-  <img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="45%">
+  <img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="35%">
   <img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="45%">
 </p>
 

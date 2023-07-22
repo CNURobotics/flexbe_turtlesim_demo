@@ -2,7 +2,9 @@
 
 The "Home" sub-behavior is implemented by a sequence of states as shown below:
 
-<img src="img/home_editor_view.png" alt="'Home' behavior." width="900">
+<p float="center">
+  <img src="img/home_editor_view.png" alt="'Home' behavior." width="45%">
+</p>
 
 This behavior is first invoked on initial entry to the `FlexBE Turtlesim Demo` behavior 
 after clearing the screen.  After that, the behavior is invoked by selecting the "Home" transition 

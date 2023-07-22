@@ -79,8 +79,10 @@ the `userdata` at the FlexBE UI Dashboard as `angle_degrees`, the desired
 angle in degrees.  In the `RotateTurtleState` editor, we specify that the required `angle` key 
 uses the remapped `angle_degrees` key value as shown below.
 
-<img src="img/rotate_state_userdata.png" alt="State machine level userdata." width="450">
-<img src="img/data_flow_graph.png" alt="Data flow view in Editor." width="450">
+<p float="center">
+  <img src="img/rotate_state_userdata.png" alt="State machine level userdata." width="45%">
+  <img src="img/data_flow_graph.png" alt="Data flow view in Editor." width="45%">
+</p>
 
 The right image also shows the `Data Flow` view allows the behavior designer to view how `userdata`
 is passed through the state machine.  Once defined, a `userdata` key/value pair
@@ -199,8 +201,10 @@ In the `FlexBE Turtlesim Demo` statemachine,
  Furthermore, it is not just a state machine as in the ["Eight"](eight_loop.md), but is in fact a separate behavior 
  [`Turtlesim Input State Behavior`](../flexbe_turtlesim_demo_flexbe_behaviors/flexbe_turtlesim_demo_flexbe_behaviors/turtlesim_input_state_behavior_sm.py) that can be loaded and executed in FlexBE independent of `FlexBE Turtlesim Demo` behavior.
 
-<img src="img/flexbe_input_userdata.png" alt="Turtlesim Input State Behavior data flow with InputState." width="450">
-<img src="img/input_ui_running.png" alt="Input user interface pop-up from input_action_server." width="450">
+<p float="center">
+  <img src="img/flexbe_input_userdata.png" alt="Turtlesim Input State Behavior data flow with InputState." width="45%">
+  <img src="img/input_ui_running.png" alt="Input user interface pop-up from input_action_server." width="45%">
+</p>
 
 In the `InputState` configuration, we 
   * specify result type 1 ([`BehaviorInput.Goal.REQUEST_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user, 
